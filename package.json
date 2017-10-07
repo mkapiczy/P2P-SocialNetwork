@@ -1,0 +1,22 @@
+{
+  "name": "p2p-social-network",
+  "version": "1.0.0",
+  "description": "Peer to peer social network implementation, which is going to be more awesome than facebook.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkapiczy/P2P-SocialNetwork.git"
+  },
+  "author": "Golf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mkapiczy/P2P-SocialNetwork/issues"
+  },
+  "homepage": "https://github.com/mkapiczy/P2P-SocialNetwork#readme",
+  "dependencies": {
+    "typescript": "^2.5.3"
+  }
+}
