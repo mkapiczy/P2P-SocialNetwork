@@ -1,7 +1,7 @@
 {
-  "name": "p2p-social-network",
+  "name": "p2p-social-network-user-node",
   "version": "1.0.0",
-  "description": "Peer to peer social network implementation, which is going to be more awesome than facebook.",
+  "description": "User node implementation for a peer to peer social network project.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/mkapiczy/P2P-SocialNetwork/issues"
   },
-  "homepage": "https://github.com/mkapiczy/P2P-SocialNetwork#readme",
-  "dependencies": {
-    "typescript": "^2.5.3"
-  }
+  "homepage": "https://github.com/mkapiczy/P2P-SocialNetwork#readme"
 }
