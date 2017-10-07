@@ -8,7 +8,8 @@
     "dev": "tsc --watch & nodemon dist",
     "test": "tsc && mocha dist/**/*.spec.js",
     "lint": "eslint src --ext ts",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "html": "copyfiles -u 2 src/views/*.pug dist/views/"
   },
   "repository": {
     "type": "git",
@@ -23,11 +24,25 @@
   "dependencies": {
     "@types/node": "7.0.22",
     "express": "4.15.3",
-    "nodemon": "1.11.0"
+    "nodemon": "1.11.0",
+    "async": "^2.5.0",
+    "big-integer": "^1.6.25",
+    "body-parser": "^1.17.2",
+    "dotenv": "^4.0.0",
+    "enum": "^2.4.0",
+    "http-status-codes": "^1.2.0",
+    "path": "latest",
+    "pug": "latest",
+    "request": "^2.81.0",
+    "sha1": "^1.1.1",
+    "swagger-tools": "latest",
+    "swagger-ui": "latest",
+    "yamljs": "latest"
   },
   "devDependencies": {
     "@types/mocha": "2.2.41",
     "@types/node": "7.0.22",
+    "copyfiles": "^1.2.0",
     "eslint": "4.0.0",
     "eslint-config-airbnb-base": "11.2.0",
     "eslint-plugin-import": "2.3.0",

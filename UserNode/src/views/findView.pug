@@ -1,0 +1,59 @@
+html  
+	head
+		title Node's information page
+		link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
+		link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css", integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r", crossorigin="anonymous")
+		script(src="https://code.jquery.com/jquery-2.2.4.js", integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=", crossorigin="anonymous")
+		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
+		script(src="/views/js/findViewJs.js")
+	body
+		.container
+			div
+				br
+				a(href="/")
+					button.btn.btn-primary 
+						|  Node Information
+				a(href="/data")
+					button.btn.btn-primary 
+						|  Endpoint Manager
+				a(href="/find")
+					button.btn.btn-primary 
+						|  Find Value
+			p
+				.panel.panel-primary
+					.panel-heading 
+						h3 KademliaGolf - Find Value in Kademlia Network:
+					.panel-body 
+						h4 
+							b Node id: 
+							| #{node.id}
+						h4
+							b Node port: 
+							| #{node.port}
+						h4
+							b IP: 
+							| #{node.ipAddr}
+						hr
+						h4
+							b Find Value:
+							br
+							br
+							div(style="float: left;") Name of Value: 
+							input(
+                                type='text'
+                                name='name'
+                                id='name'
+                                )
+							br
+							br
+							button.btn.btn-primary(onclick='findData()' id='btnSearch')
+									span.glyphicon.glyphicon-search
+										|  Search
+							br
+							br
+						hr
+						b Found value:
+						input(type="text", id="result", disabled)
+						br
+						b Data found in node:
+						input(type="text", id="node", disabled)

@@ -1,0 +1,251 @@
+# [START swagger]
+swagger: "2.0"
+info:
+  description: "Documentation for the Kademlia RESTful API"
+  title: "KademliaGolf"
+  version: "1.0.0"
+# [END swagger]
+basePath: "/api"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+schemes:
+- "http"
+paths:
+  "/kademlia/nodes/{:id}":
+    get:
+      summary: "Find the k closest neighbours to node with id"
+      description: "Find the k closest neighbours to node with id"
+      operationId: "nodeId"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/node"
+      parameters:
+        - in: path
+          name: :id
+          required: true
+          type: number
+        - in: body
+          name: Body
+          required: true
+          schema:
+            $ref: "#/definitions/bodyNode"
+  "/kademlia/data/endpoints":
+    get:
+      summary: "Search for value in Kademlia network"
+      description: "Search for value in Kademlia network"
+      operationId: "N/A"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/receivedValue"
+      parameters:
+      - description: "Name of the value to be found"
+        in: query
+        type: string
+        name: key
+        required: true 
+    post:
+      summary: Add new data to network
+      operationId: publishvalue
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: data
+          in: body
+          description: New data to be stored in Kademlia Network
+          schema: 
+            $ref: "#/definitions/postData"
+          required: true
+      responses: 
+        200: 
+          description: "200 response"
+  "/kademlia/info/ping":
+    get:
+      summary: "Ping the node from the URL"
+      description: "Ping the node from the URL"
+      operationId: "N/A"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/pingResponse"
+      parameters:
+      - description: "Ping the given IP"
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: "#/definitions/ping" 
+  "/store/data/endpoints":
+    get:
+      summary: "Search for endpoint in node"
+      description: "Search for endpoint in Node"
+      operationId: "N/A"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/receivedValue"
+      parameters:
+      - description: "Name of the endpoint to be found"
+        in: query
+        type: string
+        name: key
+        required: true  
+    post:
+      summary: Add endpoint to node
+      operationId: storevalue
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: data
+          in: body
+          description: New endpoint to be stored in node
+          schema: 
+            $ref: "#/definitions/postData"
+          required: true
+      responses: 
+        200: 
+          description: "200 response"
+  "/store/data/measurement":
+        post:
+          summary: Add measurement to node
+          operationId: storevalue
+          consumes:
+            - application/json
+          produces:
+            - application/json
+          parameters:
+            - name: data
+              in: body
+              description: New measurement to be stored in node
+              schema:
+                $ref: "#/definitions/receivedMeasurement"
+              required: true
+          responses:
+            200:
+              description: "200 response"
+  "/store/data/notification":
+      post:
+        summary: Notify node that is it the closest to IoT Device
+        operationId: storevalue
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - name: data
+            in: body
+            description: New data to be stored in node
+            schema:
+              $ref: "#/definitions/receivedNotification"
+            required: true
+        responses:
+          200:
+            description: "200 response"
+definitions:
+  node:
+    properties:
+      nodeId:
+        type: "string"
+        description: "Id of the receiving node"
+      rpcId:
+        type: "string"
+        description: "Id of the request used for validation"
+      closestNodes:
+        type: "object"
+        description: "An array of the closest sorted by distance."
+        properties:
+          id:
+            type: "string"
+            description: "Id for the given node"
+          ipAddr:
+            type: "string"
+            description: "IP Address for the given node."
+          port:
+            type: "string"
+            description: "Port for the given node."
+  pingResponse:
+    properties:
+      nodeId:
+        type: "string"
+        description: "Id for the ping'ed node"
+      rpcId:
+        type: "string"
+        description: "Request Id used for validation"
+      msg:
+        type: "string"
+        description: "Return PONG, if Ping successful"
+  ping:
+    properties:
+      nodeId:
+        type: "string"
+        description: "Id for the pinging node"
+      nodeIP:
+        type: "string"
+        description: "IP Address for the pinging node"
+      nodePort:
+        type: "string"
+        description: "Port for the pinging node"
+      rpcId:
+        type: "string"
+        description: "Request Id used for validation"
+  bodyNode:
+    properties:
+      nodeIP:
+        type: "string"
+        description: "IP Address for the requesting node"
+      nodePort:
+        type: "string"
+        description: "Port for the requesting node"
+      rpcId:
+        type: "string"
+        description: "Request Id used for validation"
+  postData:
+    properties:
+      name:
+        type: "string"
+        description: "Name of the value to be stored"
+      value:
+        type: "string"
+        description: "Value to be stored"
+  receivedValue:
+    properties:
+      value:
+        type: "string"
+        description: "Value of the found data"
+  receivedKey:
+    properties:
+      key:
+        type: "string"
+        description: "Name of the data to be found"
+  receivedNotification:
+      properties:
+        endpoint:
+          type: "string"
+          description: "Endpoint"
+  receivedMeasurement:
+      properties:
+        key:
+          type: "string"
+          description: "Hashed endpoint"
+        value:
+          type: "object"
+          description: "timestamp, humidity and temperature"

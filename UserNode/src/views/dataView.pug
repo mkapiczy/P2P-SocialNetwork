@@ -1,0 +1,73 @@
+html  
+	head
+		title Node's information page
+		link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
+		link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css", integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r", crossorigin="anonymous")
+		script(src="https://code.jquery.com/jquery-2.2.4.js", integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=", crossorigin="anonymous")
+		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
+		script(type="text/javascript", src="/views/js/dataViewJs.js")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
+		script(type="text/javascript", src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}")
+		
+	body(onLoad="onLoad()")
+		.container
+			div
+				br
+				a(href="/")
+					button.btn.btn-primary 
+						|  Node Information
+				a(href="/data")
+					button.btn.btn-primary 
+						|  Endpoint Manager
+				a(href="/find")
+					button.btn.btn-primary 
+						|  Find Value
+			p
+				.panel.panel-primary
+					.panel-heading 
+						h3 KademliaGolf - Node Data information:
+					.panel-body 
+						h4 
+							b Node id: 
+							| #{node.id}
+						h4
+							b Node port: 
+							| #{node.port}
+						h4
+							b IP: 
+							| #{node.ipAddr}
+						hr
+						h4
+							b Store Value:
+							br
+							br
+							div(style="float: left;") Endpoint:
+							input(
+                                type='text'
+                                name='endpoint'
+                                id='endpoint'
+                                )
+							br
+							div(style="float: left;")
+							br
+							br
+							button.btn.btn-primary(onclick='storeData()' id='btnStore')
+									span.glyphicon.glyphicon-hdd
+										|  Store
+							br
+							br
+						hr
+						div
+							b Data: 
+								each data in dataStorage
+									
+										.panel.panel-success
+											.panel-heading Key: #{data.key}
+											.panel-body 
+												div
+													a(href=data.value)
+														p
+														|	WoT Device: #{data.value}
+						hr
+						b Measurements:
+							div(id="chart" style="width: 900px; height: 500px")
