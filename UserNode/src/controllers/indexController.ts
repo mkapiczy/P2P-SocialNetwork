@@ -6,8 +6,8 @@ router.get("/", (request, response) => {
     response.render("index", {
         title: "Hey!",
         message: "This works :-)",
-        node: {},//global.node,
-        buckets: []//global.BucketManager.buckets
+        node: global.node,
+        buckets: global.BucketManager.buckets
     });
 });
 

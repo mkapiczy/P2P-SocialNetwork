@@ -8,7 +8,7 @@ router.get("/data", (request, response) => {
         dataForView.push({key: key, value: value});
     });*/
 
-    //console.log("MEASUREMENT MANAGER: " + global.MeasurementManager.dataStorage);
+    console.log("MEASUREMENT MANAGER: " + global.MeasurementManager.dataStorage);
     response.render("dataView", {
         title: "Hey!",
         message: "This works :-)",
