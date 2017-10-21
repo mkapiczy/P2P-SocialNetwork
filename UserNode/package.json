@@ -4,12 +4,14 @@
   "description": "User node implementation for a peer to peer social network project.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "html": "copyfiles -u 2 src/views/*.pug dist/views/",
+    "yaml": "copyfiles *.yaml dist/",
+    "static": "npm run html & npm run yaml",
+    "build": "tsc & npm run static",
     "dev": "tsc --watch & nodemon dist",
     "test": "tsc && mocha dist/**/*.spec.js",
     "lint": "eslint src --ext ts",
-    "tsc": "tsc",
-    "html": "copyfiles -u 2 src/views/*.pug dist/views/"
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
