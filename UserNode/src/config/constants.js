@@ -11,7 +11,7 @@ const tReplicate = 3600; //the interval between Kademlia replication events, whe
 const tRepublish = 86400; // the time after which the original publisher must republish a key/value pair
 const BASE_NODE_ID = 0;
 const BASE_NODE_IP_ADDR = "http://localhost";
-const BASE_NODE_PORT = "8000";
+const BASE_NODE_PORT = 8000;
 
 module.exports = {
     'alpha': ALPHA,
