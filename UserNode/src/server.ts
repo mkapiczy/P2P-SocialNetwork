@@ -8,28 +8,20 @@ import {FindController} from "./controllers/findController";
 import {KademliaController} from "./controllers/kademliaController";
 import {NotificationController} from "./controllers/notificationController";
 import {StoreController} from "./controllers/testController";
-import {TestController} from "./controllers/storeController";
 
 // Create a new express application instance
 const app: express.Application = express();
 
-//Setup Glob al
-const global = require("./custom_modules/app");
+//Setup Global
+const dotenv = require("dotenv");
+dotenv.load();
+
+const t = require("./custom_modules/app");
 const nodeIpAddr = process.env.NODE_IP;
 const nodePort = process.argv.slice(2)[0];
-global.init(nodeIpAddr, nodePort);
+t.init(nodeIpAddr, nodePort);
 
-// Routes
-app.use('/', IndexController);
-app.use('/api/data', DataController);
-app.use('/api/find', FindController);
-app.use('/api/kademlia', KademliaController);
-app.use('/api/notification', NotificationController);
-app.use('/api/store', StoreController);
-
-//Arguments
-let args = process.argv.slice(2);
-const port = args[0];
+console.log("Test Global node id:" + global.node.id);
 
 //public purposes
 const path = require("path");
@@ -41,14 +33,23 @@ app.use(
         extended: true
     })
 );
+
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "./views/"));
 
+// Routes
+app.use('/', IndexController);
+app.use('/api/data', DataController);
+app.use('/api/find', FindController);
+app.use('/api/kademlia', KademliaController);
+app.use('/api/notification', NotificationController);
+app.use('/api/store', StoreController);
+
 // Serve the application at the given port
-app.listen(port, err => {
+app.listen(nodePort, err => {
     if (err) {
         return console.log("Error: ", err);
     }
 
-    console.log(`Server is listening on port ${port}`);
+    console.log(`Server is listening on port ${nodePort}`);
 });
