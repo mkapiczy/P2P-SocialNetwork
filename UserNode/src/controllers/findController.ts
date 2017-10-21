@@ -2,7 +2,7 @@ import {Router, Request, Response} from 'express';
 
 const router: Router = Router();
 
-router.get("/find", (request, response) => {
+router.get("/", (request, response) => {
     response.render("findView", {
         title: "Hey!",
         message: "This works :-)",

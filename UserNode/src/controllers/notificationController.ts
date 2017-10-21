@@ -5,7 +5,7 @@ const router: Router = Router();
 let apiPath = "";
 router.post(apiPath + "notification", (request, response) => {
     console.log("Notification received");
-    //global.WoTManager.addWoTDevice(request.body.endpoint);
+    global.WoTManager.addWoTDevice(request.body.endpoint);
     response.status(HttpStatus.OK);
     response.send("Notification acknowledged!");
 });

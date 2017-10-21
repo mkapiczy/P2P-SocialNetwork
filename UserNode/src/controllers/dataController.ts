@@ -2,11 +2,11 @@ import {Router, Request, Response} from 'express';
 
 const router: Router = Router();
 
-router.get("/data", (request, response) => {
+router.get("/", (request, response) => {
     let dataForView = [];
-    /*global.EndpointManager.dataStorage.forEach(function (value, key) {
+    global.EndpointManager.dataStorage.forEach(function (value, key) {
         dataForView.push({key: key, value: value});
-    });*/
+    });
 
     console.log("MEASUREMENT MANAGER: " + global.MeasurementManager.dataStorage);
     response.render("dataView", {
@@ -17,12 +17,12 @@ router.get("/data", (request, response) => {
     });
 });
 
-router.get("/data/measurements", (request, response) => {
+router.get("/measurements", (request, response) => {
     let measurementsForView = [];
 
-    /*global.MeasurementManager.dataStorage.forEach(function (value, key) {
+    global.MeasurementManager.dataStorage.forEach(function (value, key) {
         measurementsForView.push({key: key, value: value});
-    });*/
+    });
 
     response.send(measurementsForView);
 });
