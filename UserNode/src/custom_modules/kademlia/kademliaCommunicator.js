@@ -151,7 +151,7 @@ exports.sendFindValue = function (recipientNode, key, callBack) {
         uri: recipientNode.ipAddr +
         ":" +
         recipientNode.port +
-        "/api/store/data/endpoints",
+        "/data/endpoints",
         body: {
             nodeId: global.node.id,
             nodeIP: global.node.ipAddr,
@@ -176,9 +176,9 @@ exports.sendFindValue = function (recipientNode, key, callBack) {
 createUriBasedOnValueType = function (valueType, recipientNode) {
     let uri = recipientNode.ipAddr + ":" + recipientNode.port;
     if (valueType === StoredValueType.ENDPOINT) {
-        uri += "/api/store/data/endpoints";
+        uri += "/data/endpoints";
     } else if (valueType === StoredValueType.MEASUREMENT) {
-        uri += "/api/store/data/measurement"
+        uri += "/data/measurement"
     }
     return uri;
 };

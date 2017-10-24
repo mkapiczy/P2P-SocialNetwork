@@ -3,13 +3,12 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 
-import {IndexController} from './controllers/indexController';
-import {DataController} from "./controllers/dataController";
-import {FindController} from "./controllers/findController";
-import {KademliaController} from "./controllers/kademliaController";
-import {NotificationController} from "./controllers/notificationController";
-import {StoreController} from "./controllers/storeController";
-import {TestController} from "./controllers/testController";
+import IndexController from './controllers/IndexController';
+import DataController from "./controllers/DataController";
+import FindController from "./controllers/FindController";
+import KademliaController from "./controllers/KademliaController";
+import NotificationController from "./controllers/NotificationController";
+import MockWoTDeviceController from "./controllers/MockWoTDeviceController";
 
 
 class Server {
@@ -27,7 +26,7 @@ class Server {
     private middleware(): void {
         this.express.use(logger('dev'));
         this.express.use(bodyParser.json());
-        this.express.use(bodyParser.urlencoded({ extended: true }));
+        this.express.use(bodyParser.urlencoded({extended: true}));
         this.express.use("/views", express.static(path.join(__dirname, "./views")));
         this.express.set("view engine", "pug");
         this.express.set("views", path.join(__dirname, "./views/"));
@@ -40,8 +39,7 @@ class Server {
         this.express.use('/find', FindController);
         this.express.use('/api/kademlia', KademliaController);
         this.express.use('/api/notification', NotificationController);
-        this.express.use('/api/store', StoreController);
-        this.express.use('/test', TestController);
+        this.express.use('/test', MockWoTDeviceController);
     }
 
 }

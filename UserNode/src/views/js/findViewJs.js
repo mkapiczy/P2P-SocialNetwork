@@ -2,7 +2,7 @@ let findData = function () {
     document.getElementById("btnSearch").disabled = true;
     let name = document.getElementById("name").value;
 
-    $.get("api/kademlia/data/endpoints", {key: name}, function(data) {
+    $.get("/data/endpoints", {key: name}, function(data) {
         document.getElementById("name").value = "";
         document.getElementById("btnSearch").disabled = false;
         if(data === "") {
