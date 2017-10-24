@@ -2,7 +2,7 @@ import {Router, Request, Response} from 'express';
 
 const router: Router = Router();
 const HttpStatus = require("http-status-codes");
-router.get("/test/wotData", (request, response) => {
+router.get("/wotData", (request, response) => {
     if (request.accepts('json')) {
         response.status(HttpStatus.OK);
         response.json({currentTime: Date.now(), humidity: 34, temperature: 20});
@@ -12,4 +12,4 @@ router.get("/test/wotData", (request, response) => {
 
 });
 
-export const StoreController: Router = router;
+export const TestController: Router = router;

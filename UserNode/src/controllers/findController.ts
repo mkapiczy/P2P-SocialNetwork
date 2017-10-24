@@ -6,7 +6,7 @@ router.get("/", (request, response) => {
     response.render("findView", {
         title: "Hey!",
         message: "This works :-)",
-        //node: global.node,
+        node: global.node,
     });
 });
 

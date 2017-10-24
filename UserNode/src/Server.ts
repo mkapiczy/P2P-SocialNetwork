@@ -8,7 +8,9 @@ import {DataController} from "./controllers/dataController";
 import {FindController} from "./controllers/findController";
 import {KademliaController} from "./controllers/kademliaController";
 import {NotificationController} from "./controllers/notificationController";
-import {StoreController} from "./controllers/testController";
+import {StoreController} from "./controllers/storeController";
+import {TestController} from "./controllers/testController";
+
 
 class Server {
     // ref to Express instance
@@ -26,6 +28,7 @@ class Server {
         this.express.use(logger('dev'));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: true }));
+        this.express.use("/views", express.static(path.join(__dirname, "./views")));
         this.express.set("view engine", "pug");
         this.express.set("views", path.join(__dirname, "./views/"));
     }
@@ -33,11 +36,12 @@ class Server {
     // Configure API endpoints.
     private routes(): void {
         this.express.use('/', IndexController);
-        this.express.use('/api/data', DataController);
-        this.express.use('/api/find', FindController);
+        this.express.use('/data', DataController);
+        this.express.use('/find', FindController);
         this.express.use('/api/kademlia', KademliaController);
         this.express.use('/api/notification', NotificationController);
         this.express.use('/api/store', StoreController);
+        this.express.use('/test', TestController);
     }
 
 }

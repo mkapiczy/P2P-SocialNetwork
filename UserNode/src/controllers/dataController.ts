@@ -12,7 +12,7 @@ router.get("/", (request, response) => {
     response.render("dataView", {
         title: "Hey!",
         message: "This works :-)",
-        //node: global.node,
+        node: global.node,
         dataStorage: dataForView,
     });
 });
