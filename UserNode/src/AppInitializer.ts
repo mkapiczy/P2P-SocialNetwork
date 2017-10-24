@@ -2,10 +2,10 @@ const util = require("./custom_modules/util");
 const Node = require("./custom_modules/kademlia/node");
 const constants = require("./config/constants");
 const BucketManager = require("./custom_modules/kademlia/BucketManager");
-const EndpointManager = require("./custom_modules/data/endpointManager");
 const communicator = require("./custom_modules/kademlia/kademliaCommunicator");
 const WoTManager = require("./custom_modules/wotManager");
-const MeasurementManager = require("./custom_modules/data/measurementManager");
+import EndpointManager from "./custom_modules/data/endpointManager";
+import MeasurementManager from "./custom_modules/data/MeasurementManager";
 
 
 class AppInitializer {
@@ -18,9 +18,9 @@ class AppInitializer {
         );
 
         global.BucketManager = new BucketManager();
-        global.EndpointManager = new EndpointManager();
-        global.MeasurementManager = new MeasurementManager();
         global.WoTManager = new WoTManager();
+        global.EndpointManager = EndpointManager;
+        global.MeasurementManager = MeasurementManager;
     }
 
     public init(nodeIpAddr, nodePort){

@@ -33,7 +33,6 @@ router.post("/data/endpoints", (request, response) => {
 router.post("/data/measurement", (request, response) => {
     console.log("Store measurement request received!");
     global.MeasurementManager.storeValue(request.body.key, request.body.value);
-    global.MeasurementManager.printData();
     response.status(HttpStatus.OK);
     response.send("Measurement stored!");
 });
