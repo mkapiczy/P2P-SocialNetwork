@@ -28,6 +28,7 @@ class Server {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({extended: true}));
         this.express.use(express.static(path.join(__dirname, "/views")));
+        this.express.use(express.static(path.join(__dirname, "/views/css")));
         this.express.set("view engine", "pug");
     }
 

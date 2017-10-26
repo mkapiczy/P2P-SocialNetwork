@@ -6,7 +6,6 @@ class IndexController {
     constructor() {
         this.router.get("/", this.indexView);
         this.router.get("/pug", this.indexPug);
-
     }
 
     indexView(request, response) {
