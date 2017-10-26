@@ -1,21 +1,21 @@
 // app.js
-var routerApp = angular.module('routerApp', ['ui.router']);
+let app = angular.module('socialApp', ['ui.router']);
 
-routerApp.config(function($stateProvider, $urlRouterProvider) {
+app.config(function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/register');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
 
-    // HOME STATES AND NESTED VIEWS ========================================
-        .state('registration', {
-            url: '/register',
-            templateUrl: 'registration-form.html'
+        .state('home', {
+            url: "/",
+            templateUrl: 'home.html'
         })
 
-        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-        .state('about', {
-            // we'll get to this in a bit
-        });
+        .state('registration', {
+            url: '/register',
+            component: 'registrationComponent'
+        })
+
 
 });

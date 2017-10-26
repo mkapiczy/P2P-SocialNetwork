@@ -9,6 +9,7 @@ import FindController from "./controllers/FindController";
 import KademliaController from "./controllers/KademliaController";
 import NotificationController from "./controllers/NotificationController";
 import MockWoTDeviceController from "./controllers/MockWoTDeviceController";
+import RegistrationController from "./controllers/RegistrationController";
 
 
 class Server {
@@ -28,6 +29,7 @@ class Server {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({extended: true}));
         this.express.use(express.static(path.join(__dirname, "/views")));
+        this.express.use(express.static(path.join(__dirname, "/views/js/components/registration")));
         this.express.use(express.static(path.join(__dirname, "/views/css")));
         this.express.set("view engine", "pug");
     }
@@ -36,6 +38,7 @@ class Server {
     private routes(): void {
 
         this.express.use('/', IndexController);
+        this.express.use('/register', RegistrationController);
         this.express.use('/data', DataController);
         this.express.use('/find', FindController);
         this.express.use('/api/kademlia', KademliaController);

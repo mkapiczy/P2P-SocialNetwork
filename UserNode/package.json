@@ -6,9 +6,10 @@
   "scripts": {
     "html": "copyfiles -u 2 src/views/* dist/views/",
     "css": "copyfiles -u 2 src/views/css/* dist/views/css/",
+    "views": "copyfiles -u 1 \"./src/views/**/*\" \"dist\"",
     "yaml": "copyfiles *.yaml dist/",
     "env": "copyfiles .env dist/",
-    "static": "npm run html & npm run yaml & npm run env & npm run css",
+    "static": "npm run views & npm run yaml & npm run env",
     "build": "tsc & npm run static",
     "dev": "tsc --watch & nodemon dist",
     "test": "tsc && mocha dist/**/*.spec.js",
