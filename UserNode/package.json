@@ -4,7 +4,7 @@
   "description": "User node implementation for a peer to peer social network project.",
   "main": "index.js",
   "scripts": {
-    "html": "copyfiles -u 2 src/views/*.pug dist/views/",
+    "html": "copyfiles -u 2 src/views/* dist/views/",
     "yaml": "copyfiles *.yaml dist/",
     "env": "copyfiles .env dist/",
     "static": "npm run html & npm run yaml & npm run env",

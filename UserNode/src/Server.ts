@@ -27,13 +27,13 @@ class Server {
         this.express.use(logger('dev'));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({extended: true}));
-        this.express.use("/views", express.static(path.join(__dirname, "./views")));
+        this.express.use(express.static(path.join(__dirname, "/views")));
         this.express.set("view engine", "pug");
-        this.express.set("views", path.join(__dirname, "./views/"));
     }
 
     // Configure API endpoints.
     private routes(): void {
+
         this.express.use('/', IndexController);
         this.express.use('/data', DataController);
         this.express.use('/find', FindController);
