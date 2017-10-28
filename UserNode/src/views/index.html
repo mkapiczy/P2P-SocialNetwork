@@ -10,7 +10,8 @@
     <title>Our App</title>
 
     <!-- SCROLLS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- load bootstrap -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script><!-- load angular -->
     <script src="//unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
@@ -21,17 +22,24 @@
 </head>
 
 <body>
-<div class="container">
 
-    <!-- HEADER AND TODO COUNT -->
-    <div class="jumbotron text-center">
-        <h1>I'm a Todo-aholic</span></h1>
-    </div>
-    <!-- MAIN CONTENT -->
-    <div class="container">
-        <div ui-view></div>
-    </div>
+<div class="container-fluid" id="mainContainer">
+    <div class="row-fluid" id="mainRow">
 
+        <div class="jumbotron text-center">
+            <h1>P2P Social Network<br>
+                <small class="text-muted">The most awesome social network on the web!</small>
+            </h1>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="mainContentColumn">
+            <div ui-view></div>
+        </div>
+
+    </div>
 </div>
+
+
 </body>
 </html>
