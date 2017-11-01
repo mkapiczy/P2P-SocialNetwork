@@ -1,6 +1,9 @@
 import {Router, Request, Response} from 'express';
 
 const HttpStatus = require("http-status-codes");
+const KeyManager = require("../custom_modules/KeyManager");
+const keyManager = new KeyManager();
+
 
 class RegistrationController {
     router: Router = Router();
@@ -15,11 +18,20 @@ class RegistrationController {
     };
 
     post(request, response){
-
         // we get the form data from the view
         console.log("Username received: " + request.body.username);
         console.log("Username received: " + request.body.approver);
         // generate public private key
+
+        keyManager.generatePublicPrivateKeyPairAndWriteToFile();
+        let testMessage = "THIS IS A TEST MESSAGE";
+        console.log("Before Encyption: " + testMessage);
+
+        let encMessage = keyManager.encryptWithPublicKey(testMessage, keyManager.getPublicKeyFromFile());
+        console.log("Encrypted message: " + encMessage);
+
+        let decMessage = keyManager.decryptWithPrivateKey(encMessage);
+        console.log("Decrypt message: " + decMessage);
 
         // find the user with provided id to acknowledge the data
 
