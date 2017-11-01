@@ -17,7 +17,8 @@ class RegistrationController {
     post(request, response){
 
         // we get the form data from the view
-
+        console.log("Username received: " + request.body.username);
+        console.log("Username received: " + request.body.approver);
         // generate public private key
 
         // find the user with provided id to acknowledge the data
@@ -43,6 +44,7 @@ class RegistrationController {
         // We publish it to the network. Providing in meta-data our public key and the id of acknowledging node.
 
         console.log("Registration post received");
+        response.send('Data from server');
     };
 
 }
