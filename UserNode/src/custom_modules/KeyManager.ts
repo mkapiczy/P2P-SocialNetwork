@@ -17,6 +17,14 @@ class KeyManager {
         this.initKeysIfExist();
     }
 
+    public getPublicKey() {
+        return this.publicKey;
+    }
+
+    public getPrivateKey() {
+        return this.privateKey;
+    }
+
     public generatePublicPrivateKeyPairAndWriteToFile(): void {
         const key = ursa.generatePrivateKey(2048, 65537);
         const privateKeyPem = key.toPrivatePem();
@@ -30,12 +38,21 @@ class KeyManager {
         this.initKeysIfExist();
     }
 
-    public encryptWithPublicKey(message: string, publicKey) {
+    public encryptWithPublicKey(message, publicKey) {
         return publicKey.encrypt(message, 'utf8', 'base64');
     }
 
-    public decryptWithPrivateKey(message: string) {
+    public decryptWithPrivateKey(message) {
         return this.privateKey.decrypt(message, 'base64', 'utf8');
+    }
+
+    public signDataWithPrivateKey(data) {
+        return this.privateKey.hashAndSign('sha256', data, 'utf8', 'base64');
+    }
+
+    public isSignatureValid(data, signature) {
+        let dataBase64 = new Buffer(data).toString('base64');
+        return this.publicKey.hashAndVerify('sha256', dataBase64, signature, 'base64');
     }
 
     private initKeysIfExist() {

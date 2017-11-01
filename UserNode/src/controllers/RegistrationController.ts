@@ -27,11 +27,16 @@ class RegistrationController {
         let testMessage = "THIS IS A TEST MESSAGE";
         console.log("Before Encyption: " + testMessage);
 
-        let encMessage = keyManager.encryptWithPublicKey(testMessage, keyManager.getPublicKeyFromFile());
+        let encMessage = keyManager.encryptWithPublicKey(testMessage, keyManager.getPublicKey());
         console.log("Encrypted message: " + encMessage);
 
         let decMessage = keyManager.decryptWithPrivateKey(encMessage);
         console.log("Decrypt message: " + decMessage);
+        
+        let signature = keyManager.signDataWithPrivateKey(testMessage);
+        console.log("Is signature valid for wrong message: " + keyManager.isSignatureValid(testMessage+"h", signature));
+
+        console.log("Is signature valid for right message: " + keyManager.isSignatureValid(testMessage, signature));
 
         // find the user with provided id to acknowledge the data
 
