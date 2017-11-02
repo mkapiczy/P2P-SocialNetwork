@@ -1,8 +1,11 @@
 import {Router, Request, Response} from 'express';
+import {DataEncrypter} from "../custom_modules/crypto/DataEncrypter";
+import {DataSigner} from "../custom_modules/crypto/DataSigner";
+import {KeyGenerator} from "../custom_modules/crypto/KeyGenerator";
+import {KeyFileStore} from "../custom_modules/crypto/KeyFileStore";
+
 
 const HttpStatus = require("http-status-codes");
-const KeyManager = require("../custom_modules/KeyManager");
-const keyManager = new KeyManager();
 
 
 class RegistrationController {
@@ -23,20 +26,26 @@ class RegistrationController {
         console.log("Username received: " + request.body.approver);
         // generate public private key
 
-        keyManager.generatePublicPrivateKeyPairAndWriteToFile();
+        let id = '55';
+        KeyGenerator.generatePublicPrivateKeyPairAndWriteToFile(id);
+        KeyGenerator.generatePublicPrivateKeyPairAndWriteToFile('1');
+
+        let privateKey = KeyFileStore.readPrivateKeyFromStore(id);
+        let publicKey = KeyFileStore.readPublicKeyFromStore(id);
+
         let testMessage = "THIS IS A TEST MESSAGE";
         console.log("Before Encyption: " + testMessage);
 
-        let encMessage = keyManager.encryptWithPublicKey(testMessage, keyManager.getPublicKey());
+        let encMessage = DataEncrypter.encryptWithPublicKey(testMessage, publicKey);
         console.log("Encrypted message: " + encMessage);
 
-        let decMessage = keyManager.decryptWithPrivateKey(encMessage);
+        let decMessage = DataEncrypter.decryptWithPrivateKey(encMessage, privateKey);
         console.log("Decrypt message: " + decMessage);
         
-        let signature = keyManager.signDataWithPrivateKey(testMessage);
-        console.log("Is signature valid for wrong message: " + keyManager.isSignatureValid(testMessage+"h", signature));
+        let signature = DataSigner.signDataWithPrivateKey(testMessage, privateKey);
+        console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage+"h", signature, publicKey));
 
-        console.log("Is signature valid for right message: " + keyManager.isSignatureValid(testMessage, signature));
+        console.log("Is signature valid for right message: " + DataSigner.isSignatureValid(testMessage, signature, publicKey));
 
         // find the user with provided id to acknowledge the data
 
