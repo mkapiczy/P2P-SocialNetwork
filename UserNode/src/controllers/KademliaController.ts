@@ -7,6 +7,8 @@ const Node = require("./../custom_modules/kademlia/node");
 const StoredValueType = require("./../enum/storedValueType");
 const communicator = require('./../custom_modules/communicator');
 
+const router: Router = Router();
+
 class KademliaController {
     router: Router = Router();
 
