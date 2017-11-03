@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 const path = require('path');
-const ursa = require('ursa');
+const NodeRSA = require('node-rsa');
 
 export class KeyFileStore {
     private static keysFolderName = "keys";
@@ -26,7 +26,9 @@ export class KeyFileStore {
         let privateKey;
         const privateKeyNamePath = path.join(this.keysFolderName, filename + "_private" + this.fileExtension);
         if(fs.existsSync(privateKeyNamePath)) {
-            privateKey = ursa.createPrivateKey(fs.readFileSync(privateKeyNamePath));
+            let newKey = new NodeRSA();
+            newKey.importKey(fs.readFileSync(privateKeyNamePath),'pkcs1-private-pem');
+            privateKey = newKey;
         }
         return privateKey;
     }
@@ -35,7 +37,9 @@ export class KeyFileStore {
         let publicKey;
         const publicKeyNamePath = path.join(this.keysFolderName, filename + "_public" + this.fileExtension);
         if(fs.existsSync(publicKeyNamePath)) {
-            publicKey = ursa.createPublicKey(fs.readFileSync(publicKeyNamePath));
+            let newKey = new NodeRSA();
+            newKey.importKey(fs.readFileSync(publicKeyNamePath),'pkcs1-public-pem');
+            publicKey = newKey;
         }
         return publicKey;
     }
