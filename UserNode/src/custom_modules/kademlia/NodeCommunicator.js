@@ -3,10 +3,10 @@ const util = require("../util");
 const communicator = require("./kademliaCommunicator");
 const async = require("async");
 
-function DataPublisher() {
+function NodeCommunicator() {
 }
 
-DataPublisher.prototype.publishToKNodesClosestToTheKey = function (key, value, valueType, callback) {
+NodeCommunicator.prototype.publishToKNodesClosestToTheKey = function (key, value, valueType, callback) {
     let shortlist = [];
     let hashedKey = util.createHashFromKey(key, constants.B / 8);
     console.log("Publish key: " + hashedKey);
@@ -20,7 +20,7 @@ DataPublisher.prototype.publishToKNodesClosestToTheKey = function (key, value, v
     });
 };
 
-DataPublisher.prototype.findClosestNodeToTheKye = function (key, callback) {
+NodeCommunicator.prototype.findClosestNodeToTheKye = function (key, callback) {
     let shortlist = [];
     let hashedKey = util.createHashFromKey(key, constants.B / 8);
     console.log("Publish key: " + hashedKey);
@@ -32,7 +32,7 @@ DataPublisher.prototype.findClosestNodeToTheKye = function (key, callback) {
     });
 };
 
-DataPublisher.prototype.findValue = function (name, callback) {
+NodeCommunicator.prototype.findValue = function (name, callback) {
     console.log("Name is: " + name);
     const key = util.createHashFromKey(name, constants.B / 8);
     console.log("The key is: " + key);
@@ -220,4 +220,4 @@ addIfUniqueToShortlist = function (shortlist, nodes, isContacted) {
     return shortlist;
 };
 
-module.exports = DataPublisher;
+module.exports = new NodeCommunicator();

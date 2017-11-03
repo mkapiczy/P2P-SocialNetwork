@@ -1,9 +1,8 @@
 const request = require("request");
 const util = require("../util");
-
-const NodeState = require("../../enum/nodeStateEnum");
-const Node = require("./node")
-const StoredValueType = require("../../enum/storedValueType");
+const Node = require("./node");
+const {ValueTypeEnum} = require("../enum/ValueTypeEnum");
+import {NodeStateEnum} from "../enum/NodeStateEnum";
 
 exports.sendPing = function (senderNode, nodeToPing, callBack) {
     let requestRpcId = util.createRandomAlphaNumericIdentifier(20);
@@ -24,15 +23,15 @@ exports.sendPing = function (senderNode, nodeToPing, callBack) {
             console.log(error);
             console.log("Node with id: " + nodeToPing.id + " removed from the buckets!");
             BucketManager.removeNodeFromTheBuckets(nodeToPing);
-            callBack(NodeState.NOT_ALIVE);
+            callBack(NodeStateEnum.NOT_ALIVE);
         } else {
             console.log(response.body);
-            responseRpcId = response.body.rpcId;
+            let responseRpcId = response.body.rpcId;
             if (responseRpcId === requestRpcId) {
                 console.log("Now I ping: " + nodeToPing.port);
                 let nodeToUpdate = new Node(nodeToPing.id, nodeToPing.ipAddr, nodeToPing.port);
                 global.BucketManager.updateNodeInBuckets(nodeToUpdate);
-                callBack(NodeState.ALIVE);
+                callBack(NodeStateEnum.ALIVE);
             }
         }
     });
@@ -61,12 +60,12 @@ exports.sendFindNode = function (closestToId, recipientNode, callBack) {
         if (error) {
             console.log(error);
             BucketManager.removeNodeFromTheBuckets(recipientNode);
-            callBack(NodeState.NOT_ALIVE);
+            callBack(NodeStateEnum.NOT_ALIVE);
         } else {
             console.log("Received closest nodes:", response.body.closestNodes);
             if (response.body.rpcId === requestRpcId) {
                 global.BucketManager.updateNodeInBuckets(recipientNode);
-                closestNodes = response.body.closestNodes;
+                let closestNodes = response.body.closestNodes;
                 closestNodes.forEach(function (node) {
                     if (node.id !== global.node.id) {
                         exports.sendPing(global.node, node, function (result) {
@@ -75,7 +74,7 @@ exports.sendFindNode = function (closestToId, recipientNode, callBack) {
                     }
                 }, this);
                 console.log("Buckets after find node", global.BucketManager.buckets);
-                callBack(NodeState.ALIVE);
+                callBack(NodeStateEnum.ALIVE);
             }
         }
     });
@@ -105,7 +104,7 @@ exports.sendGetClosestNodesRequest = function (closestToId, recipientNode, callB
         if (error) {
             console.log(error);
             BucketManager.removeNodeFromTheBuckets(recipientNode);
-            callBack(NodeState.NOT_ALIVE);
+            callBack(NodeStateEnum.NOT_ALIVE);
         } else {
             callBack(response.body.closestNodes);
         }
@@ -115,6 +114,7 @@ exports.sendGetClosestNodesRequest = function (closestToId, recipientNode, callB
 exports.sendStoreValue = function (recipientNode, key, value, valueType, callBack) {
     console.log("Send store value called for value type: " + valueType);
     let uri = createUriBasedOnValueType(valueType, recipientNode);
+    console.log("Store value uri: " + uri);
     let requestRpcId = util.createRandomAlphaNumericIdentifier(20);
     let requestOptions = {
         method: "POST",
@@ -125,7 +125,8 @@ exports.sendStoreValue = function (recipientNode, key, value, valueType, callBac
             nodePort: global.node.port,
             rpcId: requestRpcId,
             key: key,
-            value: value
+            value: value,
+            valueType: valueType
         },
         json: true
     };
@@ -134,10 +135,10 @@ exports.sendStoreValue = function (recipientNode, key, value, valueType, callBac
         if (error) {
             console.log(error);
             BucketManager.removeNodeFromTheBuckets(recipientNode);
-            callBack(NodeState.NOT_ALIVE);
+            callBack(NodeStateEnum.NOT_ALIVE);
         } else {
             console.log("Response in communicator: " + response);
-            callBack(NodeState.ALIVE);
+            callBack(NodeStateEnum.ALIVE);
         }
     });
 };
@@ -151,7 +152,7 @@ exports.sendFindValue = function (recipientNode, key, callBack) {
         uri: recipientNode.ipAddr +
         ":" +
         recipientNode.port +
-        "/data/endpoints",
+        "/data/key",
         body: {
             nodeId: global.node.id,
             nodeIP: global.node.ipAddr,
@@ -166,19 +167,17 @@ exports.sendFindValue = function (recipientNode, key, callBack) {
         if (error) {
             console.log(error);
             BucketManager.removeNodeFromTheBuckets(recipientNode);
-            callBack(NodeState.NOT_ALIVE);
+            callBack(NodeStateEnum.NOT_ALIVE);
         } else {
             callBack(response.body.value);
         }
     });
 };
 
-createUriBasedOnValueType = function (valueType, recipientNode) {
+let createUriBasedOnValueType = function (valueType, recipientNode) {
     let uri = recipientNode.ipAddr + ":" + recipientNode.port;
-    if (valueType === StoredValueType.ENDPOINT) {
-        uri += "/data/endpoints";
-    } else if (valueType === StoredValueType.MEASUREMENT) {
-        uri += "/data/measurement"
+    if (valueType === ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST) {
+        uri += "/data/key";
     }
     return uri;
 };

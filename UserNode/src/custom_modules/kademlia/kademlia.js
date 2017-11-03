@@ -1,6 +1,5 @@
-const DataPublisher = require("../kademlia/dataPublisher");
+const NodeCommunicator = require("./NodeCommunicator");
 const constants = require("../../config/constants");
-const dataPublisher = new DataPublisher();
 const util = require("../util");
 
 function Kademlia() {
@@ -8,7 +7,7 @@ function Kademlia() {
 
 Kademlia.prototype.storeValue = function (key, value, valueType, dataManager, callback) {
     dataManager.storeValueWithKeyHashing(key, value);
-    dataPublisher.publishToKNodesClosestToTheKey(key, value, valueType, closestNodes => {
+    NodeCommunicator.publishToKNodesClosestToTheKey(key, value, valueType, closestNodes => {
         let hashedKey = util.createHashFromKey(key, constants.B / 8);
         closestNodes = global.BucketManager.sortNodesListByDistanceAscending(hashedKey, closestNodes);
         callback(closestNodes[0]);
@@ -16,7 +15,7 @@ Kademlia.prototype.storeValue = function (key, value, valueType, dataManager, ca
 };
 
 Kademlia.prototype.findValue = function (key, callback) {
-    dataPublisher.findValue(key, (nodeId, value) => {
+    NodeCommunicator.findValue(key, (nodeId, value) => {
         if (value) {
             console.log("Value for the key " + key + " found in node " + nodeId);
             console.log("Value: " + value);
@@ -40,7 +39,7 @@ Kademlia.prototype.handlePing = function (node, callback) {
 };
 
 Kademlia.prototype.isGlobalNodeTheClosest = function(endpoint, callback){
-    dataPublisher.findClosestNodeToTheKye(endpoint, (closestNode)=>{
+    NodeCommunicator.findClosestNodeToTheKye(endpoint, (closestNode)=>{
         callback(closestNode.id === global.node.id);
     });
 };

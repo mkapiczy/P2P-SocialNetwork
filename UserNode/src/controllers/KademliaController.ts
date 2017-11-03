@@ -4,10 +4,10 @@ const Kademlia = require("./../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
 const HttpStatus = require("http-status-codes");
 const Node = require("./../custom_modules/kademlia/node");
-const StoredValueType = require("./../enum/storedValueType");
-const communicator = require('./../custom_modules/communicator');
+const communicator = require("../custom_modules/kademlia/kademliaCommunicator");
 
-const router: Router = Router();
+import DataManagerIdentifier from "../custom_modules/data/manager/DataManagerIdentifier"
+
 
 class KademliaController {
     router: Router = Router();
@@ -16,7 +16,6 @@ class KademliaController {
         this.router.get("/info/ping", this.infoPing);
         this.router.get("/nodes/:id", this.findNode);
         this.router.post("/data/endpoints", this.storeValue);
-        this.router.get("/data/endpoints", this.findEndpointValue);
     }
 
     infoPing(request, response) {
@@ -58,45 +57,26 @@ class KademliaController {
                 rpcId: request.body.rpcId,
                 closestNodes: closestNodes
             });
+
+            communicator.sendPing(global.node, requestNode, function (result) {
+                //Adding is handled in ping function
+            });
         });
     }
 
+    //TODO Changed endpoint interfac e requests need to be adjusted. Instead of endpoint value and valueType
     storeValue(request, response) {
-        let endpoint = request.body.endpoint;
+        const value = request.body.value;
+        const valueType = request.body.valueType;
 
-        setInterval(() => {
-            kademlia.isGlobalNodeTheClosest(endpoint, (result) => {
-                if (result) {
-                    console.log("I am the closest to the endpoint!");
-                    global.WoTManager.addWoTDevice(endpoint);
-                } else {
-                    console.log("I am not the closest to the endpoint");
-                    global.WoTManager.removeWoTDevice(endpoint);
-                }
-            });
-        }, 10000);
+        const dataManager =DataManagerIdentifier.getDataManagerBasedOnDataType(valueType);
 
-        kademlia.storeValue(endpoint, endpoint, StoredValueType.ENDPOINT, global.EndpointManager, (closestNode) => {
-            console.log("Send notification to: " + closestNode.id);
-            communicator.notifyClosestNode(closestNode, endpoint, () => {
-            });
+        kademlia.storeValue(value, value, valueType, dataManager, (closestNode) => {
             response.status(HttpStatus.OK);
             response.send("post received!");
         });
     }
 
-    findEndpointValue(request, response) {
-        console.log("Find value request received: " + request.query.key);
-        const key = request.query.key;
-        let value = global.EndpointManager.findValueByNonHashedKey(key);
-        if (value) {
-            response.send({value: value, node: global.node.id});
-        } else {
-            kademlia.findValue(key, (value, nodeId) => {
-                response.send({value: value, node: nodeId});
-            });
-        }
-    }
 }
 
 

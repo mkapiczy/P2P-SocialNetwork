@@ -3,9 +3,16 @@ import {DataEncrypter} from "../custom_modules/crypto/DataEncrypter";
 import {DataSigner} from "../custom_modules/crypto/DataSigner";
 import {KeyGenerator} from "../custom_modules/crypto/KeyGenerator";
 import {KeyFileStore} from "../custom_modules/crypto/KeyFileStore";
+import {Signature} from "../custom_modules/data/entity/Signature";
+import {Key} from "../custom_modules/data/entity/Key";
+import {KeyType} from "../custom_modules/enum/KeyTypeEnum";
+import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
 
-
-const HttpStatus = require("http-status-codes");
+const Kademlia = require("../custom_modules/kademlia/kademlia");
+const kademlia = new Kademlia();
+const util = require("../custom_modules/util");
+import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
+const constants = require("../config/constants");
 
 
 class RegistrationController {
@@ -17,11 +24,18 @@ class RegistrationController {
     }
 
     get(request, response) {
-        console.log("Registration get received");
+        let username = request.query.username;
+        console.log("Registration get received for username: " + username);
+        kademlia.findValue(username, (value, nodeId) => {
+            console.log("value: " + value + "  nodeId: " + nodeId);
+            response.send("value: " + value.key.value + "  nodeId: " + nodeId);
+        })
+
     };
 
-    post(request, response){
+    post(request, response) {
         // we get the form data from the view
+        let approver = request.body.approver;
         console.log("Username received: " + request.body.username);
         console.log("Username received: " + request.body.approver);
         // generate public private key
@@ -33,6 +47,7 @@ class RegistrationController {
         let privateKey = KeyFileStore.readPrivateKeyFromStore(id);
         let publicKey = KeyFileStore.readPublicKeyFromStore(id);
 
+
         let testMessage = "THIS IS A TEST MESSAGE";
         console.log("Before Encyption: " + testMessage);
 
@@ -41,11 +56,19 @@ class RegistrationController {
 
         let decMessage = DataEncrypter.decryptWithPrivateKey(encMessage, privateKey);
         console.log("Decrypt message: " + decMessage);
-        
+
         let signature = DataSigner.signDataWithPrivateKey(testMessage, privateKey);
-        console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage+"h", signature, publicKey));
+        console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage + "h", signature, publicKey));
 
         console.log("Is signature valid for right message: " + DataSigner.isSignatureValid(testMessage, signature, publicKey));
+        let key = new Key(publicKey, KeyType.GLOBAL);
+        let signatureToPublish = new Signature(signature, approver, "base64");
+        let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, signatureToPublish);
+
+        kademlia.storeValue(approver, acknowledgmentRerquestMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, (closestNodes) => {
+
+        });
+
 
         // find the user with provided id to acknowledge the data
 

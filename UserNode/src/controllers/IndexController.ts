@@ -14,8 +14,6 @@ class IndexController {
 
     indexPug(request, response){
         response.render("index", {
-            title: "Hey!",
-            message: "This works :-)",
             node: global.node,
             buckets: global.BucketManager.buckets
         });

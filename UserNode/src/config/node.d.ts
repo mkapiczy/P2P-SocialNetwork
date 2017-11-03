@@ -3,8 +3,6 @@ declare namespace NodeJS {
         baseNode: any,
         node: any,
         BucketManager: any,
-        EndpointManager: any,
-        MeasurementManager: any,
-        WoTManager: any
+        AcknowledgmentRequestManager: any
     }
 }
