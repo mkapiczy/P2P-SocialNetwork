@@ -174,9 +174,9 @@ exports.sendFindValue = function (recipientNode, key, valueType, callBack) {
 let createUriBasedOnValueType = function (valueType, recipientNode) {
     let uri = recipientNode.ipAddr + ":" + recipientNode.port;
     if (valueType === ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST) {
-        uri += "/data/key";
-    } else if(valueType ===ValueTypeEnum.SIGNED_KEY){
         uri += "/data/ack";
+    } else if(valueType ===ValueTypeEnum.SIGNED_KEY){
+        uri += "/data/key";
     }
     return uri;
 };
