@@ -1,5 +1,6 @@
 import * as http from 'http';
 import * as debug from 'debug';
+import 'source-map-support/register';
 
 const dotenv = require("dotenv");
 dotenv.load();

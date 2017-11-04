@@ -9,7 +9,6 @@ import FindController from "./controllers/FindController";
 import KademliaController from "./controllers/KademliaController";
 import RegistrationController from "./controllers/RegistrationController";
 
-
 class Server {
     // ref to Express instance
     public express: express.Application;

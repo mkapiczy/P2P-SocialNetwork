@@ -42,6 +42,7 @@
     "pug": "latest",
     "request": "^2.81.0",
     "sha1": "^1.1.1",
+    "source-map-support": "^0.5.0",
     "swagger-tools": "latest",
     "swagger-ui": "latest",
     "yamljs": "latest"
