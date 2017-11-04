@@ -37,6 +37,7 @@ class RegistrationController {
 
     post(request, response) {
         // we get the form data from the view
+        let username = request.body.username;
         let approver = request.body.approver;
         console.log("Username received: " + request.body.username);
         console.log("Username received: " + request.body.approver);
@@ -68,7 +69,7 @@ class RegistrationController {
         let userData = new UserDataDTO(username);
         let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, userData);
 
-        kademlia.storeValue(approver, acknowledgmentRerquestMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, (closestNodes) => {
+        kademlia.storeValue(approver, acknowledgmentRerquestMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, (KclosestNodes) => {
 
         });
 
