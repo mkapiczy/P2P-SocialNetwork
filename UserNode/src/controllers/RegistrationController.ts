@@ -10,7 +10,6 @@ import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/Acknowle
 
 const Kademlia = require("../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
-const util = require("../custom_modules/util");
 import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
 
 const constants = require("../config/constants");
@@ -61,7 +60,7 @@ class RegistrationController {
         console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage + "h", signature, publicKey));
 
         console.log("Is signature valid for right message: " + DataSigner.isSignatureValid(testMessage, signature, publicKey));
-        let key = new KeyDTO(publicKey.exportKey('pkcs1-public-pem'), KeyType.GLOBAL);
+        let key = new KeyDTO(publicKey.toString(), KeyType.GLOBAL);
         let signatureToPublish = new SignatureDTO(signature, approver, "base64");
         let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, signatureToPublish);
 
