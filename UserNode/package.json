@@ -49,6 +49,7 @@
   "devDependencies": {
     "@types/mocha": "2.2.41",
     "@types/node": "7.0.22",
+    "@types/node-rsa": "^0.4.0",
     "copyfiles": "^1.2.0",
     "eslint": "4.0.0",
     "eslint-config-airbnb-base": "11.2.0",
