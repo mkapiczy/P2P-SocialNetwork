@@ -4,7 +4,7 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 
 import IndexController from './controllers/IndexController';
-import DataController from "./controllers/DataController";
+import AckMessageController from "./controllers/AckMessageController";
 import FindController from "./controllers/FindController";
 import KademliaController from "./controllers/KademliaController";
 import RegistrationController from "./controllers/RegistrationController";
@@ -37,7 +37,7 @@ class Server {
 
         this.express.use('/', IndexController);
         this.express.use('/register', RegistrationController);
-        this.express.use('/data', DataController);
+        this.express.use('/data', AckMessageController);
         this.express.use('/find', FindController);
         this.express.use('/api/kademlia', KademliaController);
     }

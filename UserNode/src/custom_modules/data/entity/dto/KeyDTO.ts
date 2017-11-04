@@ -1,6 +1,6 @@
-import {KeyType} from "../../enum/KeyTypeEnum";
+import {KeyType} from "../../../enum/KeyTypeEnum";
 
-export class Key {
+export class KeyDTO {
     value: String;
     type: KeyType;
 

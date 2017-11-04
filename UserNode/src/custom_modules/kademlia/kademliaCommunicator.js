@@ -143,16 +143,13 @@ exports.sendStoreValue = function (recipientNode, key, value, valueType, callBac
     });
 };
 
-exports.sendFindValue = function (recipientNode, key, callBack) {
+exports.sendFindValue = function (recipientNode, key, valueType, callBack) {
     console.log("Send find value was called!");
     let requestRpcId = util.createRandomAlphaNumericIdentifier(20);
-
+    let uri = createUriBasedOnValueType(valueType, recipientNode);
     let requestOptions = {
         method: "GET",
-        uri: recipientNode.ipAddr +
-        ":" +
-        recipientNode.port +
-        "/data/key",
+        uri: uri,
         body: {
             nodeId: global.node.id,
             nodeIP: global.node.ipAddr,

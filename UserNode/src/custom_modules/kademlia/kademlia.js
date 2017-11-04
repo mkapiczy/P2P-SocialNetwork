@@ -14,8 +14,8 @@ Kademlia.prototype.storeValue = function (key, value, valueType, dataManager, ca
     });
 };
 
-Kademlia.prototype.findValue = function (key, callback) {
-    NodeCommunicator.findValue(key, (nodeId, value) => {
+Kademlia.prototype.findValue = function (key, valueType, callback) {
+    NodeCommunicator.findValue(key, valueType, (nodeId, value) => {
         if (value) {
             console.log("Value for the key " + key + " found in node " + nodeId);
             console.log("Value: " + value);
@@ -38,8 +38,8 @@ Kademlia.prototype.handlePing = function (node, callback) {
     callback();
 };
 
-Kademlia.prototype.isGlobalNodeTheClosest = function(endpoint, callback){
-    NodeCommunicator.findClosestNodeToTheKye(endpoint, (closestNode)=>{
+Kademlia.prototype.isGlobalNodeTheClosest = function (endpoint, callback) {
+    NodeCommunicator.findClosestNodeToTheKye(endpoint, (closestNode) => {
         callback(closestNode.id === global.node.id);
     });
 };

@@ -1,4 +1,4 @@
-export class SignatureMetadata {
+export class SignatureMetadataDTO {
     signer: String;
     hashAlgorithm: String;
     timestamp: Date;
