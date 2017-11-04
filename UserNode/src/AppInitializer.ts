@@ -4,6 +4,7 @@ const constants = require("./config/constants");
 const BucketManager = require("./custom_modules/kademlia/BucketManager");
 const communicator = require("./custom_modules/kademlia/kademliaCommunicator");
 import AcknowledgmentRequestManager from "./custom_modules/data/manager/AcknowledgmentRequestManager";
+import SignedKeyManager from "./custom_modules/data/manager/SignedKeyManager";
 
 
 class AppInitializer {
@@ -17,6 +18,7 @@ class AppInitializer {
 
         global.BucketManager = new BucketManager();
         global.AcknowledgmentRequestManager = AcknowledgmentRequestManager;
+        global.SignedKeyManager = SignedKeyManager;
     }
 
     public init(nodeIpAddr, nodePort) {

@@ -1,3 +1,4 @@
 export enum ValueTypeEnum {
-    ACKNOWLEDGEMENT_REQUEST
+    ACKNOWLEDGEMENT_REQUEST,
+    SIGNED_KEY
 }

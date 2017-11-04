@@ -1,17 +1,18 @@
-import {Router, Request, Response} from 'express';
+import {Request, Response, Router} from 'express';
 import {DataEncrypter} from "../custom_modules/crypto/DataEncrypter";
 import {DataSigner} from "../custom_modules/crypto/DataSigner";
 import {KeyGenerator} from "../custom_modules/crypto/KeyGenerator";
 import {KeyFileStore} from "../custom_modules/crypto/KeyFileStore";
-import {SignatureDTO} from "../custom_modules/data/entity/dto/SignatureDTO";
 import {KeyDTO} from "../custom_modules/data/entity/dto/KeyDTO";
 import {KeyType} from "../custom_modules/enum/KeyTypeEnum";
 import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
+import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
+import {UserDataDTO} from "../custom_modules/data/entity/dto/UserDataDTO";
+import AcknowldgementService from "../service/AcknowledgementService"
 
 const Kademlia = require("../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
 const util = require("../custom_modules/util");
-import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
 
 const constants = require("../config/constants");
 
@@ -21,20 +22,34 @@ class RegistrationController {
 
     constructor() {
         this.router.get("/", this.get);
+        this.router.get("/ack", this.checkIfAcknowledged);
         this.router.post("/", this.post);
+    }
+
+    checkIfAcknowledged(request, response) {
+        let username = request.query.username;
+        console.log("Acknowledgement check received for username: " + username);
+        AcknowldgementService.isAcknowledged(username, (result) => {
+            console.log("Result " + result);
+            response.send("Result " + result)
+        });
     }
 
     get(request, response) {
         let username = request.query.username;
         console.log("Registration get received for username: " + username);
-        kademlia.findValue(username, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (value, nodeId) => {
-            console.log("value: " + value + "  nodeId: " + nodeId);
-            response.send("value: " + value.key.value + "  nodeId: " + nodeId);
-        })
+
+        AcknowldgementService.getPendingAcknowledgementMessages(username, (pendingAckMessages) => {
+            if (pendingAckMessages) {
+                AcknowldgementService.processAcknowledgementMessages(pendingAckMessages, username);
+            }
+            response.send("OK");
+        });
     };
 
     post(request, response) {
         // we get the form data from the view
+        let username = request.body.username;
         let approver = request.body.approver;
         console.log("Username received: " + request.body.username);
         console.log("Username received: " + request.body.approver);
@@ -61,9 +76,10 @@ class RegistrationController {
         console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage + "h", signature, publicKey));
 
         console.log("Is signature valid for right message: " + DataSigner.isSignatureValid(testMessage, signature, publicKey));
+
         let key = new KeyDTO(publicKey.exportKey('pkcs1-public-pem'), KeyType.GLOBAL);
-        let signatureToPublish = new SignatureDTO(signature, approver, "base64");
-        let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, signatureToPublish);
+        let userData = new UserDataDTO(username);
+        let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, userData);
 
         kademlia.storeValue(approver, acknowledgmentRerquestMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, (closestNodes) => {
 

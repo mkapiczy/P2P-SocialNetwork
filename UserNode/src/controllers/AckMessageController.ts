@@ -5,8 +5,8 @@ class AckMessageController {
     router: Router = Router();
 
     constructor() {
-        this.router.get("/key", this.getAckMessage);
-        this.router.post("/key", this.storeAckMessage);
+        this.router.get("/ack", this.getAckMessage);
+        this.router.post("/ack", this.storeAckMessage);
     }
 
     getAckMessage(request, response) {
@@ -19,7 +19,7 @@ class AckMessageController {
         console.log("KeyDTO: " + request.body.key + " | value: " + request.body.value);
         global.AcknowledgmentRequestManager.storeValue(request.body.key, request.body.value);
         response.status(HttpStatus.OK);
-        response.send("Measurement stored!");
+        response.send("Ack message stored!");
     }
 }
 

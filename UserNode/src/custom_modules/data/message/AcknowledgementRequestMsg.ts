@@ -1,12 +1,12 @@
 import {KeyDTO} from "../entity/dto/KeyDTO";
-import {SignatureDTO} from "../entity/dto/SignatureDTO";
+import {UserDataDTO} from "../entity/dto/UserDataDTO";
 
 export class AcknowledgmentRerquestMsg {
     key: KeyDTO;
-    signature: SignatureDTO;
+    userData: UserDataDTO;
 
-    constructor(key: KeyDTO, signature: SignatureDTO) {
+    constructor(key: KeyDTO, userData: UserDataDTO) {
         this.key = key;
-        this.signature= signature;
+        this.userData = userData;
     }
 }
