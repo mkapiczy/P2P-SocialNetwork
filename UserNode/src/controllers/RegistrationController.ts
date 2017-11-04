@@ -7,10 +7,13 @@ import {SignatureDTO} from "../custom_modules/data/entity/dto/SignatureDTO";
 import {KeyDTO} from "../custom_modules/data/entity/dto/KeyDTO";
 import {KeyType} from "../custom_modules/enum/KeyTypeEnum";
 import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
+import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
+import {UserDataDTO} from "../custom_modules/data/entity/dto/UserDataDTO";
+import AcknowldgementService from "../service/AcknowledgementService"
 
 const Kademlia = require("../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
-import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
+const util = require("../custom_modules/util");
 
 const constants = require("../config/constants");
 
@@ -60,9 +63,10 @@ class RegistrationController {
         console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage + "h", signature, publicKey));
 
         console.log("Is signature valid for right message: " + DataSigner.isSignatureValid(testMessage, signature, publicKey));
+
         let key = new KeyDTO(publicKey.toString(), KeyType.GLOBAL);
-        let signatureToPublish = new SignatureDTO(signature, approver, "base64");
-        let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, signatureToPublish);
+        let userData = new UserDataDTO(username);
+        let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, userData);
 
         kademlia.storeValue(approver, acknowledgmentRerquestMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, (closestNodes) => {
 

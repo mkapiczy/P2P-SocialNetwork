@@ -6,6 +6,7 @@ function Kademlia() {
 }
 
 Kademlia.prototype.storeValue = function (key, value, valueType, dataManager, callback) {
+    console.log("Kademlia store value for key: " + key + " value: " + value);
     dataManager.storeValueWithKeyHashing(key, value);
     NodeCommunicator.publishToKNodesClosestToTheKey(key, value, valueType, closestNodes => {
         let hashedKey = util.createHashFromKey(key, constants.B / 8);

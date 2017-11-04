@@ -5,9 +5,9 @@ import * as bodyParser from 'body-parser';
 
 import IndexController from './controllers/IndexController';
 import AckMessageController from "./controllers/AckMessageController";
-import FindController from "./controllers/FindController";
 import KademliaController from "./controllers/KademliaController";
 import RegistrationController from "./controllers/RegistrationController";
+import SignedKeyController from "./controllers/SignedKeyController";
 
 class Server {
     // ref to Express instance
@@ -37,9 +37,9 @@ class Server {
 
         this.express.use('/', IndexController);
         this.express.use('/register', RegistrationController);
-        this.express.use('/data', AckMessageController);
-        this.express.use('/find', FindController);
         this.express.use('/api/kademlia', KademliaController);
+        this.express.use('/data', AckMessageController);
+        this.express.use('/data', SignedKeyController);
     }
 
 }

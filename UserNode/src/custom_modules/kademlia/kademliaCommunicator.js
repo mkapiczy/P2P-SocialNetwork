@@ -175,6 +175,8 @@ let createUriBasedOnValueType = function (valueType, recipientNode) {
     let uri = recipientNode.ipAddr + ":" + recipientNode.port;
     if (valueType === ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST) {
         uri += "/data/key";
+    } else if(valueType ===ValueTypeEnum.SIGNED_KEY){
+        uri += "/data/ack";
     }
     return uri;
 };
