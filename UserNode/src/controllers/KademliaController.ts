@@ -54,8 +54,8 @@ class KademliaController {
             response.setHeader("Content-Type", "application/json");
             response.json({
                 nodeId: global.node.id,
+                closestNodes: closestNodes,
                 rpcId: request.body.rpcId,
-                closestNodes: closestNodes
             });
 
             communicator.sendPing(global.node, requestNode, function (result) {
@@ -69,7 +69,7 @@ class KademliaController {
         const value = request.body.value;
         const valueType = request.body.valueType;
 
-        const dataManager =DataManagerIdentifier.getDataManagerBasedOnDataType(valueType);
+        const dataManager = DataManagerIdentifier.getDataManagerBasedOnDataType(valueType);
 
         kademlia.storeValue(value, value, valueType, dataManager, (closestNode) => {
             response.status(HttpStatus.OK);

@@ -3,8 +3,8 @@ import {DataEncrypter} from "../custom_modules/crypto/DataEncrypter";
 import {DataSigner} from "../custom_modules/crypto/DataSigner";
 import {KeyGenerator} from "../custom_modules/crypto/KeyGenerator";
 import {KeyFileStore} from "../custom_modules/crypto/KeyFileStore";
-import {Signature} from "../custom_modules/data/entity/Signature";
-import {Key} from "../custom_modules/data/entity/Key";
+import {SignatureDTO} from "../custom_modules/data/entity/dto/SignatureDTO";
+import {KeyDTO} from "../custom_modules/data/entity/dto/KeyDTO";
 import {KeyType} from "../custom_modules/enum/KeyTypeEnum";
 import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
 
@@ -12,6 +12,7 @@ const Kademlia = require("../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
 const util = require("../custom_modules/util");
 import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum"
+
 const constants = require("../config/constants");
 
 
@@ -26,11 +27,10 @@ class RegistrationController {
     get(request, response) {
         let username = request.query.username;
         console.log("Registration get received for username: " + username);
-        kademlia.findValue(username, (value, nodeId) => {
+        kademlia.findValue(username, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (value, nodeId) => {
             console.log("value: " + value + "  nodeId: " + nodeId);
             response.send("value: " + value.key.value + "  nodeId: " + nodeId);
         })
-
     };
 
     post(request, response) {
@@ -61,8 +61,8 @@ class RegistrationController {
         console.log("Is signature valid for wrong message: " + DataSigner.isSignatureValid(testMessage + "h", signature, publicKey));
 
         console.log("Is signature valid for right message: " + DataSigner.isSignatureValid(testMessage, signature, publicKey));
-        let key = new Key(publicKey, KeyType.GLOBAL);
-        let signatureToPublish = new Signature(signature, approver, "base64");
+        let key = new KeyDTO(publicKey.exportKey('pkcs1-public-pem'), KeyType.GLOBAL);
+        let signatureToPublish = new SignatureDTO(signature, approver, "base64");
         let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, signatureToPublish);
 
         kademlia.storeValue(approver, acknowledgmentRerquestMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, (closestNodes) => {
@@ -97,6 +97,12 @@ class RegistrationController {
     };
 
 }
+
+// TODO
+// crypto - operate only on strings, and keystorage should be able to store multiple key types
+// view for acknowledgement message showing, and acknowledging
+// checking if our key was acknowledged and view for that
+// actual acknowledging
 
 export default new RegistrationController().router;
 
