@@ -8,6 +8,7 @@ import AckMessageController from "./controllers/AckMessageController";
 import KademliaController from "./controllers/KademliaController";
 import RegistrationController from "./controllers/RegistrationController";
 import SignedKeyController from "./controllers/SignedKeyController";
+import LoginController from "./controllers/LoginController";
 
 class Server {
     // ref to Express instance
@@ -41,6 +42,7 @@ class Server {
         this.express.use('/api/kademlia', KademliaController);
         this.express.use('/data', AckMessageController);
         this.express.use('/data', SignedKeyController);
+        this.express.use('/login', LoginController)
     }
 
 }

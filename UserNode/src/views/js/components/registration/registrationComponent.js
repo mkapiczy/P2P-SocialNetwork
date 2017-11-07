@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('socialApp')
+
     .component('registrationComponent', {
 
-        bindings:{
+        bindings: {},
 
         },
         
@@ -11,8 +12,10 @@ angular.module('socialApp')
             this.register = function(){
                 console.log("Username: " + this.form.username);
                 console.log("Approver: " + this.form.approver);
-
-                $http.post("http://localhost:8000/register/", {
+                // TODO Very bad hack, this should be in configuration but for easier testing we read the port in node.js from console.
+                // Should be read only once on home controller and saved in module constants
+                let apiEndpoint = $location.absUrl().split('/#!')[0];
+                $http.post(apiEndpoint + "/register/", {
                     username: this.form.username,
                     approver: this.form.approver
                 }).then(function (data) {
@@ -27,4 +30,4 @@ angular.module('socialApp')
 
         templateUrl: './registration-form.html'
 
-});
+    });
