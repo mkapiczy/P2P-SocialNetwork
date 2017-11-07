@@ -18,7 +18,7 @@ angular.module('socialApp')
                     approver: this.form.approver
                 }).then(function (data) {
                     console.log("Response from server:" + data.data);
-                    $cookies.put("username", username);
+                    $cookies.put("username", data.data.username);
                     console.log("Cookie put:" + $cookies.get("username"));
                     //$stateProvider.state.go('start');                    
                 });
