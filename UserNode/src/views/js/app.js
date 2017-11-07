@@ -9,7 +9,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
         .state('home', {
             url: "/",
-            templateUrl: 'home.html'
+            component: 'homeComponent'
         })
 
         .state('registration', {
