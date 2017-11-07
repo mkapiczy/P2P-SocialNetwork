@@ -5,16 +5,25 @@ angular.module('socialApp')
 
         bindings: {},
 
-        controller: function ($http) {
-            this.login = function(){
-                console.log("Username: " + this.form.username);
+        controller: function ($http, $location) {
+            this.login = function () {
+                setErrorText("");
 
-                $http.post("http://localhost:8000/login/", {
+                let apiEndpoint = $location.absUrl().split('/#!')[0];
+                $http.post(apiEndpoint + "/login/", {
                     username: this.form.username,
                 }).then(function (data) {
-                    console.log("Response from server:" + data.data);
-                });
+                        console.log("Response from server:" + data.data);
+                    },
+                    function (error) {
+                        setErrorText(error.data);
+                        console.log(error.data);
+                    });
             };
+
+            function setErrorText(txt) {
+                document.getElementById("errorMsg").innerText = txt;
+            }
         },
 
         controllerAs: 'homeCtr',
