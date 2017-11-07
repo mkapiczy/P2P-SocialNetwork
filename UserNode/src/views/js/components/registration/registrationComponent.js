@@ -6,8 +6,8 @@ angular.module('socialApp')
         bindings:{
 
         },
-
-        controller: function($http, $cookies, $stateProvider){
+        
+        controller: ['$http', 'ui.router', 'ngCookies', function($http, $stateProvider, $cookies){
             this.register = function(){
                 console.log("Username: " + this.form.username);
                 console.log("Approver: " + this.form.approver);
@@ -16,12 +16,12 @@ angular.module('socialApp')
                     username: this.form.username,
                     approver: this.form.approver
                 }).then(function (data) {
-                    $stateProvider.state.go('start');
                     console.log("Response from server:" + data.data);
-                    $cookieStore.put("username", data.data.Username);
+                    //$cookies.put("username", data.data.Username);
+                    //$stateProvider.state.go('start');                    
                 });
             }
-        },
+        }],
 
         controllerAs: 'regCtr',
 

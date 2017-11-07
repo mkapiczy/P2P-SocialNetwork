@@ -1,7 +1,7 @@
 // app.js
 let app = angular.module('socialApp', ['ui.router', 'ngCookies']);
 
-app.config(function ($stateProvider, $urlRouterProvider, $cookies) {
+app.config(function ($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise('/');
 
