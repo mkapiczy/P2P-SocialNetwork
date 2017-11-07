@@ -1,7 +1,7 @@
 // app.js
-let app = angular.module('socialApp', ['ui.router']);
+let app = angular.module('socialApp', ['ui.router', 'ngCookies']);
 
-app.config(function ($stateProvider, $urlRouterProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $cookies) {
 
     $urlRouterProvider.otherwise('/');
 
@@ -15,6 +15,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('registration', {
             url: '/register',
             component: 'registrationComponent'
+        })
+
+        .state('start', {
+            url: '/startpage',
+            component: 'startPageComponent'
         })
 
 

@@ -7,7 +7,7 @@ angular.module('socialApp')
 
         },
 
-        controller: function($http){
+        controller: function($http, $cookies, $stateProvider){
             this.register = function(){
                 console.log("Username: " + this.form.username);
                 console.log("Approver: " + this.form.approver);
@@ -16,7 +16,9 @@ angular.module('socialApp')
                     username: this.form.username,
                     approver: this.form.approver
                 }).then(function (data) {
+                    $stateProvider.state.go('start');
                     console.log("Response from server:" + data.data);
+                    $cookieStore.put("username", data.data.Username);
                 });
             }
         },
