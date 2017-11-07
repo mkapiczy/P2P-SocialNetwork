@@ -10,7 +10,6 @@ const kademlia = new Kademlia();
 class AcknowledgementService {
 
     constructor() {
-
     }
 
     public publiskAcknowledgementRequestMsgIntoTheNetwork(key: String, ackMsg: AcknowledgmentRerquestMsg, callback) {
@@ -19,18 +18,18 @@ class AcknowledgementService {
         });
     }
 
-    public getPendingAcknowledgementMessages(myUsername: String, callback: (result: AcknowledgmentRerquestMsg) => void) {
-        kademlia.findValue(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (ackMsg, nodeId) => {
-            if (ackMsg) {
-                console.log("Ackwnoledgement message found: " + ackMsg + "  nodeId: " + nodeId);
-                callback(ackMsg)
+    public getPendingAcknowledgementMessages(myUsername: String, callback: (result: Array<AcknowledgmentRerquestMsg>) => void) {
+        kademlia.findValue(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages, nodeId) => {
+            if (messages) {
+                console.log("Ackwnoledgement messages found: " + messages + "  nodeId: " + nodeId);
+                callback(messages)
             } else {
                 callback(null);
             }
         });
     }
 
-    public processAcknowledgementMessages(ackMsg: AcknowledgmentRerquestMsg, myUsername: String): void {
+    public processAcknowledgementMessage(ackMsg: AcknowledgmentRerquestMsg, myUsername: String): void {
         let key = ackMsg.key;
         let userData = ackMsg.userData;
         if (this.validateAcknowldgementUserData(userData)) {

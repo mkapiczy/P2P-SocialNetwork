@@ -8,37 +8,23 @@ import {KeyType} from "../custom_modules/enum/KeyTypeEnum";
 import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
 import {UserDataDTO} from "../custom_modules/data/entity/dto/UserDataDTO";
 import AcknowldgementService from "../service/AcknowledgementService"
+import RegistrationService from "../service/RegistrationService";
 
 
 class RegistrationController {
     router: Router = Router();
 
     constructor() {
-        this.router.get("/", this.get);
-        this.router.get("/ack", this.checkIfAcknowledged);
+        this.router.get("/status", this.checkIfRegistered);
         this.router.post("/", this.post);
     }
 
-    checkIfAcknowledged(request, response) {
+    checkIfRegistered(request, response) {
         let username = request.query.username;
-        console.log("Acknowledgement check received for username: " + username);
-        AcknowldgementService.isAcknowledged(username, (result) => {
-            console.log("Result " + result);
-            response.send("Result " + result)
-        });
-    }
-
-
-    get(request, response) {
-        let username = request.query.username;
-        console.log("Registration get received for username: " + username);
-        AcknowldgementService.getPendingAcknowledgementMessages(username, (pendingAckMessages) => {
-            if (pendingAckMessages) {
-                AcknowldgementService.processAcknowledgementMessages(pendingAckMessages, username);
-            }
-            response.send("OK");
-        });
-
+        console.log("Is registered check received for username: " + username);
+        RegistrationService.isRegistered(username, (result => {
+            response.send(result);
+        }))
     };
 
     post(request, response) {
@@ -81,12 +67,6 @@ class RegistrationController {
     };
 
 }
-
-// TODO
-// crypto - operate only on strings, and keystorage should be able to store multiple key types
-// view for acknowledgement message showing, and acknowledging
-// checking if our key was acknowledged and view for that
-// actual acknowledging
 
 export default new RegistrationController().router;
 

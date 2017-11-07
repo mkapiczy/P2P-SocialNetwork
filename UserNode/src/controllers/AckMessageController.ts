@@ -1,4 +1,6 @@
 import {Router, Request, Response} from 'express';
+import AcknowledgementService from "../service/AcknowledgementService";
+
 const HttpStatus = require("http-status-codes");
 
 class AckMessageController {
@@ -6,12 +8,34 @@ class AckMessageController {
 
     constructor() {
         this.router.get("/ack", this.getAckMessage);
+        this.router.get("/ack/pending_messages", this.getPendingMessages);
         this.router.post("/ack", this.storeAckMessage);
+        this.router.post("/ack/process", this.processUserAckMessages);
     }
 
     getAckMessage(request, response) {
         let value = global.AcknowledgmentRequestManager.findValueByHashedKey(request.body.key);
         response.json({value: value});
+    };
+
+    getPendingMessages(request, response) {
+        let username = request.query.username;
+        let messages = AcknowledgementService.getPendingAcknowledgementMessages(username, (messages) => {
+            response.json({messages: messages});
+        });
+    };
+
+    processUserAckMessages(request, response) {
+        let username = request.query.username;
+        console.log("Process acknowledgement messages for: " + username);
+        AcknowledgementService.getPendingAcknowledgementMessages(username, (pendingAckMessages) => {
+            if (pendingAckMessages) {
+                pendingAckMessages.forEach(msg =>{
+                    AcknowledgementService.processAcknowledgementMessage(msg, username);
+                }) ;
+            }
+            response.send("");
+        });
     };
 
     storeAckMessage(request, response) {
