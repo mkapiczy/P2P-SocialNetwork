@@ -5,3 +5,7 @@ html {
 body {
     padding-top: 50px;
 }
+
+.error-msg {
+    color: red;
+}
