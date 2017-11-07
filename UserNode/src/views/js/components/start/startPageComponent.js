@@ -7,10 +7,10 @@ angular.module('socialApp')
 
         },
 
-        controller: ['$http', 'ngCookies', function($http, $cookies){
+        controller: ['$http', function($http){
             this.numberOfMessages = 0;
             this.$onInit = function() {
-                $http.get("http://localhost:8000/data/ack/pendingMessages", {
+                $http.get("http://localhost:8000/data/ack/pending_messages", {
                     //username: $cookies.get("username"),
                 }).then(function (data) {
                     console.log("Response from server:" + data.data.messages.length);
