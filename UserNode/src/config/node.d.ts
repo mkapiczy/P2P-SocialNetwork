@@ -3,7 +3,9 @@ declare namespace NodeJS {
         baseNode: any,
         node: any,
         BucketManager: any,
-        AcknowledgmentRequestManager: any
-        SignedKeyManager: any
+        AcknowledgmentRequestManager: any,
+        SignedKeyManager: any,
+        publicKey: any,
+        privateKey: any
     }
 }

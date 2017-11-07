@@ -1,4 +1,11 @@
 import {Router, Request, Response} from 'express';
+import {KeyFileStore} from "../custom_modules/crypto/KeyFileStore";
+import RegistrationService from "../service/RegistrationService";
+import SignedKeyService from "../service/SignedKeyService";
+import {SignedKeyDTO} from "../custom_modules/data/entity/dto/SignedKeyDTO";
+
+const util = require("../custom_modules/util");
+const constants = require("../config/constants");
 
 const HttpStatus = require("http-status-codes");
 
@@ -9,13 +16,41 @@ class LoginController {
         this.router.post("/", this.login);
     }
 
-    login(request, response) {
+    public login(request, response) {
         let username = request.body.username;
+        const userId = util.createHashFromKey(username, constants.B / 8);
 
-        response.send('I received username: ' + username);
+        global.privateKey = KeyFileStore.readPrivateKeyFromStore(userId);
+
+        if (!global.privateKey) {
+            console.log('Private key does not exist for user ' + username + ' id: ' + userId);
+            response.status(404).send('Private key does not exist');
+            return;
+        }
+
+        RegistrationService.isRegistered(userId, (isRegistered) => {
+            if (isRegistered) {
+                global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
+                if (global.publicKey) {
+                    response.status(200).send('All good!');
+                    return
+                } else {
+                    SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
+                        if (signedKey) {
+                            global.publicKey = signedKey.key;
+                            response.status(200).send('All good!');
+                        } else {
+                            response.status(404).send('Public Key not found');
+                        }
+                    });
+                }
+            } else {
+                response.status(401).send('User is not yet approved');
+            }
+
+        });
 
     }
-
 
 }
 

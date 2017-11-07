@@ -28,9 +28,9 @@ class AppInitializer {
             global.node = new Node(nodeId, nodeIpAddr, nodePort);
             global.BucketManager.updateNodeInBuckets(global.baseNode);
 
-            communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
+            /*communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
                 console.log("Find_node done");
-            });
+            });*/
         } else {
             let nodeId = constants.BASE_NODE_ID;
             console.log(nodeId);
