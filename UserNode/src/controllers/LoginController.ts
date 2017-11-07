@@ -38,18 +38,17 @@ class LoginController {
                     SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
                         if (signedKey) {
                             global.publicKey = signedKey.key;
-                            response.status(200).send('All good!');
+                            KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value); //Todo not sure if signedKey.key.value is correctly received here
+                            response.status(200).send('All good! Public Key found in network');
                         } else {
-                            response.status(404).send('Public Key not found');
+                            response.status(404).send('Public Key not found in network');
                         }
                     });
                 }
             } else {
                 response.status(401).send('User is not yet approved');
             }
-
         });
-
     }
 
 }
