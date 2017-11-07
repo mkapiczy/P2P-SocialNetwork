@@ -62,7 +62,10 @@ class RegistrationController {
         let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, userData);
 
         AcknowldgementService.publiskAcknowledgementRequestMsgIntoTheNetwork(approver, acknowledgmentRerquestMsg, () => {
-            response.send('Ack published to the network!');
+            response.json({
+                            message: 'Ack published to the network!',
+                            username: username
+                         });
         });
     };
 
