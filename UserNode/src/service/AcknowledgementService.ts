@@ -19,14 +19,19 @@ class AcknowledgementService {
     }
 
     public getPendingAcknowledgementMessages(myUsername: String, callback: (result: Array<AcknowledgmentRerquestMsg>) => void) {
-        kademlia.findValue(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages, nodeId) => {
-            if (messages) {
-                console.log("Ackwnoledgement messages found: " + messages + "  nodeId: " + nodeId);
-                callback(messages)
-            } else {
-                callback(null);
-            }
-        });
+        let localMessages = global.AcknowledgmentRequestManager.findValueByNonHashedKey(myUsername);
+        if (localMessages) {
+            callback(localMessages);
+        } else {
+            kademlia.findValue(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages, nodeId) => {
+                if (messages) {
+                    console.log("Ackwnoledgement messages found: " + messages + "  nodeId: " + nodeId);
+                    callback(messages)
+                } else {
+                    callback(null);
+                }
+            });
+        }
     }
 
     public processAcknowledgementMessage(ackMsg: AcknowledgmentRerquestMsg, myUsername: String): void {

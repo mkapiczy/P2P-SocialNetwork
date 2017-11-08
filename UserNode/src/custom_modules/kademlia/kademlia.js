@@ -29,7 +29,6 @@ Kademlia.prototype.findValue = function (key, valueType, callback) {
 };
 
 Kademlia.prototype.getKClosestNodes = function (id, requestNode, callback) {
-    global.BucketManager.updateNodeInBuckets(requestNode);
     let closestNodes = global.BucketManager.getClosestNodes(id);
     callback(closestNodes);
 };

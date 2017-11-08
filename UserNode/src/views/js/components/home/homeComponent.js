@@ -27,6 +27,9 @@ angular.module('socialApp')
         },
 
         controllerAs: 'homeCtr',
-        templateUrl: './home.html'
+        templateUrl: './home.html',
+        params:{
+            msg: ''
+        }
 
     });

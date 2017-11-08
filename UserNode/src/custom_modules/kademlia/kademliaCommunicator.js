@@ -68,9 +68,7 @@ exports.sendFindNode = function (closestToId, recipientNode, callBack) {
                 let closestNodes = response.body.closestNodes;
                 closestNodes.forEach(function (node) {
                     if (node.id !== global.node.id) {
-                        exports.sendPing(global.node, node, function (result) {
-                            //Adding is handled in ping function
-                        });
+                        global.BucketManager.updateNodeInBuckets(node);
                     }
                 }, this);
                 console.log("Buckets after find node", global.BucketManager.buckets);
@@ -175,7 +173,7 @@ let createUriBasedOnValueType = function (valueType, recipientNode) {
     let uri = recipientNode.ipAddr + ":" + recipientNode.port;
     if (valueType === ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST) {
         uri += "/data/ack";
-    } else if(valueType ===ValueTypeEnum.SIGNED_KEY){
+    } else if (valueType === ValueTypeEnum.SIGNED_KEY) {
         uri += "/data/key";
     }
     return uri;

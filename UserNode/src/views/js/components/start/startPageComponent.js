@@ -3,25 +3,23 @@
 angular.module('socialApp')
     .component('startPageComponent', {
 
-        bindings:{
+        bindings: {},
 
-        },
-
-        controller: ['$http', '$cookies', function($http, $cookies){
+        controller: ['$http', '$cookies', '$location', function ($http, $cookies, $location) {
             this.numberOfMessages = 0;
             console.log($cookies.get("username")),
-            this.$onInit = function() {
-                $http.get("http://localhost:8000/data/ack/pending_messages", {
-                    username: $cookies.get("username")
-                }).then(function (data) {
-                    console.log("Response from server:" + data.data.messages.length);
-                    this.numberOfMessages = data.data;
-                });
-              };
+                this.$onInit = function () {
+                    let apiEndpoint = $location.absUrl().split('/#!')[0];
+                    let username = $cookies.get("username");
+                    $http.get(apiEndpoint + "/data/ack/pending_messages?username=" + username, {}).then(function (data) {
+                        console.log("Response from server:" + data.data.messages.length);
+                        this.numberOfMessages = data.data;
+                    });
+                };
         }],
 
         controllerAs: 'startCtr',
 
         templateUrl: './start-page.html'
 
-});
+    });

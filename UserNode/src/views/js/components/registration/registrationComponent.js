@@ -5,9 +5,9 @@ angular.module('socialApp')
     .component('registrationComponent', {
 
         bindings: {},
-        
-        controller: ['$http','$location', '$cookies', '$state', function($http, $location, $cookies, $state){
-            this.register = function(){
+
+        controller: ['$http', '$location', '$cookies', '$state', function ($http, $location, $cookies, $state) {
+            this.register = function () {
                 console.log("Username: " + this.form.username);
                 console.log("Approver: " + this.form.approver);
                 // TODO Very bad hack, this should be in configuration but for easier testing we read the port in node.js from console.
@@ -19,7 +19,7 @@ angular.module('socialApp')
                 }).then(function (data) {
                     console.log("Response from server:" + data.data.message);
                     $cookies.put("username", data.data.username);
-                    $state.go('start');                    
+                    $state.go('home', {msg: "Registered. Wait for approbal"});
                 });
             }
         }],

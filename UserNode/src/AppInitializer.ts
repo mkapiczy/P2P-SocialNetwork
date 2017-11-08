@@ -23,11 +23,8 @@ class AppInitializer {
 
     public init(nodeIpAddr, nodePort) {
         if (nodePort !== constants.BASE_NODE_PORT) {
-            let nodeId = util.createRandomId(constants.B / 8);
-            console.log(nodeId + " : " + nodeIpAddr + " : " + nodePort);
-            global.node = new Node(nodeId, nodeIpAddr, nodePort);
-            global.BucketManager.updateNodeInBuckets(global.baseNode);
-
+            console.log( nodeIpAddr + " : " + nodePort);
+            global.node = new Node(null, nodeIpAddr, nodePort);
             /*communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
                 console.log("Find_node done");
             });*/
@@ -35,6 +32,7 @@ class AppInitializer {
             let nodeId = constants.BASE_NODE_ID;
             console.log(nodeId);
             global.node = new Node(nodeId, nodeIpAddr, nodePort);
+
         }
     }
 

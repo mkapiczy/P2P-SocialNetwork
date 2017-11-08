@@ -57,10 +57,6 @@ class KademliaController {
                 closestNodes: closestNodes,
                 rpcId: request.body.rpcId,
             });
-
-            communicator.sendPing(global.node, requestNode, function (result) {
-                //Adding is handled in ping function
-            });
         });
     }
 

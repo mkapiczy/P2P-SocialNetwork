@@ -8,6 +8,7 @@ const util = require("../custom_modules/util");
 const constants = require("../config/constants");
 
 const HttpStatus = require("http-status-codes");
+const communicator = require("../custom_modules/kademlia/kademliaCommunicator");
 
 class LoginController {
     router: Router = Router();
@@ -27,27 +28,30 @@ class LoginController {
             response.status(404).send('Private key does not exist');
             return;
         }
-
-        RegistrationService.isRegistered(userId, (isRegistered) => {
-            if (isRegistered) {
-                global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
-                if (global.publicKey) {
-                    response.status(200).send('All good!');
-                    return
+        global.node.setId(userId);
+        global.BucketManager.updateNodeInBuckets(global.baseNode);
+        communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
+            RegistrationService.isRegistered(userId, (isRegistered) => {
+                if (isRegistered) {
+                    global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
+                    if (global.publicKey) {
+                        response.status(HttpStatus).send('All good!');
+                        return
+                    } else {
+                        SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
+                            if (signedKey) {
+                                global.publicKey = signedKey.key;
+                                KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value); //Todo not sure if signedKey.key.value is correctly received here
+                                response.status(200).send('All good! Public Key found in network');
+                            } else {
+                                response.status(404).send('Public Key not found in network');
+                            }
+                        });
+                    }
                 } else {
-                    SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
-                        if (signedKey) {
-                            global.publicKey = signedKey.key;
-                            KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value); //Todo not sure if signedKey.key.value is correctly received here
-                            response.status(200).send('All good! Public Key found in network');
-                        } else {
-                            response.status(404).send('Public Key not found in network');
-                        }
-                    });
+                    response.status(401).send('User is not yet approved');
                 }
-            } else {
-                response.status(401).send('User is not yet approved');
-            }
+            });
         });
     }
 

@@ -117,7 +117,7 @@ shouldUpdateClosestNode = function (shortlist, currentClosestNode, hashedKey) {
     shortlist = global.BucketManager.sortNodesListByDistanceAscending(hashedKey, shortlist);
     newClosestNode = shortlist[0];
 
-    if (newClosestNode.id !== currentClosestNode.id) {
+    if (newClosestNode && newClosestNode.id !== currentClosestNode.id) {
         console.log("New closest node!");
         return true;
     }
