@@ -13,12 +13,13 @@ angular.module('socialApp')
                 // TODO Very bad hack, this should be in configuration but for easier testing we read the port in node.js from console.
                 // Should be read only once on home controller and saved in module constants
                 let apiEndpoint = $location.absUrl().split('/#!')[0];
+                let port = $location.port();
                 $http.post(apiEndpoint + "/register/", {
                     username: this.form.username,
                     approver: this.form.approver
                 }).then(function (data) {
                     console.log("Response from server:" + data.data.message);
-                    $cookies.put("username", data.data.username);
+                    $cookies.put("username_" + port, data.data.username);
                     $state.go('home', {msg: "Registered. Wait for approbal"});
                 });
             }

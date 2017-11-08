@@ -6,14 +6,19 @@ angular.module('socialApp')
         bindings: {},
 
         controller: ['$http', '$cookies', '$location', function ($http, $cookies, $location) {
+            const self = this;
             this.numberOfMessages = 0;
             console.log($cookies.get("username")),
                 this.$onInit = function () {
                     let apiEndpoint = $location.absUrl().split('/#!')[0];
-                    let username = $cookies.get("username");
-                    $http.get(apiEndpoint + "/data/ack/pending_messages?username=" + username, {}).then(function (data) {
+                    let port = $location.port();
+                    let username = $cookies.get("username_" + port);
+
+                    $http.get(apiEndpoint + "/data/ack/pending_messages",  {
+                        params: { username: 0 } //Todo: 0 is hardcoded for testing with 8000, but we should use username cookies id
+                    }).then(function (data) {
                         console.log("Response from server:" + data.data.messages.length);
-                        this.numberOfMessages = data.data;
+                        self.numberOfMessages = data.data.messages.length;
                     });
                 };
         }],
