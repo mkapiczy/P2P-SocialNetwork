@@ -1,19 +1,13 @@
 import {AcknowledgmentRerquestMsg} from "../message/AcknowledgementRequestMsg";
-import {isUndefined} from "util";
 
 const constants = require("../../../config/constants");
 const util = require("../../util");
 
 class AcknowledgmentRequestManager implements DataManagerInterface {
-    dataStorage: Map<String, Array<AcknowledgmentRerquestMsg>> = new Map();
+    dataStorage: Map<String, AcknowledgmentRerquestMsg> = new Map();
 
-    storeValue(key: String, value: AcknowledgmentRerquestMsg): void {
-        let messages = this.dataStorage.get(key);
-        if (isUndefined(messages)) {
-            messages = [];
-        }
-        messages.push(value);
-        this.dataStorage.set(key, messages);
+    storeValue(key: String, message: AcknowledgmentRerquestMsg): void {
+        this.dataStorage.set(key, message);
     }
 
     storeValueWithKeyHashing(key: String, value: AcknowledgmentRerquestMsg): void {
@@ -21,13 +15,30 @@ class AcknowledgmentRequestManager implements DataManagerInterface {
         this.storeValue(hashedKey, value);
     }
 
-    findValueByNonHashedKey(key: String): Array<AcknowledgmentRerquestMsg> {
+    findValueByNonHashedKey(key: String): AcknowledgmentRerquestMsg {
         let hashedKey = util.createHashFromKey(key, constants.B / 8);
         return this.dataStorage.get(hashedKey);
     }
 
-    findValueByHashedKey(key: String): Array<AcknowledgmentRerquestMsg> {
+    findValueByHashedKey(key: String): AcknowledgmentRerquestMsg {
         return this.dataStorage.get(key);
+    }
+
+    findAllValuesForRelatedKeys(parentKey: String,): Array<AcknowledgmentRerquestMsg> {
+        let resultMessages = [];
+        let msgIterator = 0;
+        let msg;
+        do {
+            let key = parentKey + msgIterator.toString();
+            console.log("Local " + key);
+            msg = this.findValueByNonHashedKey(key);
+            if (msg) {
+                resultMessages.push(msg);
+            }
+            msgIterator++;
+        } while (msg);
+
+        return resultMessages;
     }
 }
 

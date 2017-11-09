@@ -13,23 +13,53 @@ class AcknowledgementService {
     }
 
     public publiskAcknowledgementRequestMsgIntoTheNetwork(key: String, ackMsg: AcknowledgmentRerquestMsg, callback) {
-        kademlia.storeValue(key, ackMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, () => {
-            callback();
+        this.getAvailableKey(key, 0, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (availableKey) => {
+            console.log("Value stored with the key " + availableKey);
+            kademlia.storeValue(availableKey, ackMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, () => {
+                callback();
+            });
+        });
+    }
+
+    private getAvailableKey(key, keyIteration, valueType, callback) {
+        let callKey = key + keyIteration.toString();
+        console.log("Call key " + callKey + " check");
+        kademlia.findValue(callKey, valueType, (value) => {
+            if (value) {
+                this.getAvailableKey(key, ++keyIteration, valueType, callback);
+            } else {
+                callback(callKey);
+            }
+        });
+    }
+
+    private getAllMessagesForRelatedKeys(key, valueType, callback) {
+        let messages = [];
+        this.getAllMessagesForRelatedKeysAccum(key, messages, valueType, (messages) => {
+            callback(messages)
+        });
+    }
+
+    private getAllMessagesForRelatedKeysAccum(key, messagesAccumulator, valueType, callback) {
+        let itaration = messagesAccumulator.length;
+        let callKey = key + itaration.toString();
+        kademlia.findValue(callKey, valueType, (value) => {
+            if (value) {
+                messagesAccumulator.push(value);
+                this.getAllMessagesForRelatedKeysAccum(key, messagesAccumulator, valueType, callback);
+            } else {
+                callback(messagesAccumulator);
+            }
         });
     }
 
     public getPendingAcknowledgementMessages(myUsername: String, callback: (result: Array<AcknowledgmentRerquestMsg>) => void) {
-        let localMessages = global.AcknowledgmentRequestManager.findValueByNonHashedKey(myUsername);
+        let localMessages = global.AcknowledgmentRequestManager.findAllValuesForRelatedKeys(myUsername);
         if (localMessages) {
             callback(localMessages);
         } else {
-            kademlia.findValue(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages, nodeId) => {
-                if (messages) {
-                    console.log("Ackwnoledgement messages found: " + messages + "  nodeId: " + nodeId);
-                    callback(messages)
-                } else {
-                    callback(null);
-                }
+            this.getAllMessagesForRelatedKeys(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages) => {
+                callback(messages);
             });
         }
     }
