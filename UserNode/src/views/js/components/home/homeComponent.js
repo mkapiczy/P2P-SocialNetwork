@@ -9,7 +9,7 @@ angular.module('socialApp')
             this.login = function () {
                 setErrorText("");
 
-                let apiEndpoint = $location.absUrl().split('/#!')[0];
+                let apiEndpoint = $location.absUrl().split('/#')[0];
                 $http.post(apiEndpoint + "/login/", {
                     username: this.form.username,
                 }).then(function (data) {

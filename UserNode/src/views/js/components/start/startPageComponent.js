@@ -10,7 +10,7 @@ angular.module('socialApp')
             this.numberOfMessages = 0;
             console.log($cookies.get("username"));
             this.$onInit = function () {
-                let apiEndpoint = $location.absUrl().split('/#!')[0];
+                let apiEndpoint = $location.absUrl().split('/#')[0];
                 let port = $location.port();
                 let username = $cookies.get("username_" + port);
                 $http.get(apiEndpoint + "/data/ack/pending/number", {
