@@ -22,5 +22,8 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
             component: 'startPageComponent'
         })
 
-
+        .state('ack', {
+            url: '/ack',
+            component: 'ackComponent'
+        })
 });

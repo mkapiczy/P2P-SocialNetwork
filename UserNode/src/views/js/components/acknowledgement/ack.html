@@ -1,5 +1,5 @@
 <div>
-    <div class="row-fluid" id="registrationView">
+    <div class="row-fluid" id="ackView">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -19,7 +19,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li class="active">
-                            <a ui-sref="ack">Pending Messages <span class="badge">{{startCtr.numberOfMessages}}</span>
+                            <a href="">Pending Messages <span class="badge">{{startCtr.numberOfMessages}}</span>
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -33,5 +33,13 @@
             </div>
             <!-- /.container-fluid -->
         </nav>
+
+        <div>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="msg in ackCtr.messages">
+                    {{msg.userData.username}}
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
