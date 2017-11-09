@@ -8,7 +8,8 @@ class AckMessageController {
 
     constructor() {
         this.router.get("/ack", this.getAckMessage);
-        this.router.get("/ack/pending_messages", this.getPendingMessages);
+        this.router.get("/ack/pending/messages", this.getPendingMessages);
+        this.router.get("/ack/pending/number", this.getPendingMessagesNumber);
         this.router.post("/ack", this.storeAckMessage);
         this.router.post("/ack/process", this.processUserAckMessages);
     }
@@ -25,14 +26,22 @@ class AckMessageController {
         });
     };
 
+    getPendingMessagesNumber(request, response) {
+        let username = request.query.username;
+        let messages = AcknowledgementService.getPendingAcknowledgementMessages(username, (messages) => {
+            console.log(messages.length)
+            response.json({"numberOfPendingMessages": messages.length});
+        });
+    };
+
     processUserAckMessages(request, response) {
         let username = request.query.username;
         console.log("Process acknowledgement messages for: " + username);
         AcknowledgementService.getPendingAcknowledgementMessages(username, (pendingAckMessages) => {
             if (pendingAckMessages) {
-                pendingAckMessages.forEach(msg =>{
+                pendingAckMessages.forEach(msg => {
                     AcknowledgementService.processAcknowledgementMessage(msg, username);
-                }) ;
+                });
             }
             response.send("");
         });
