@@ -71,6 +71,7 @@ class AcknowledgementService {
             let signedKey = SignedKeyService.generateSignedKey(myUsername, key);
             SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, () => {
                 console.log("Signed Key for user " + userData.username + " published into the network");
+                // remove pending messages for this username
             })
         } else {
             console.log("I do not know this user: + " + userData.username + " !");

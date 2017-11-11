@@ -5,20 +5,30 @@ angular.module('socialApp')
 
         bindings: {},
 
-        controller: function ($http, $location) {
+        controller: function ($http, $location, AuthService) {
             this.login = function () {
                 setErrorText("");
 
-                let apiEndpoint = $location.absUrl().split('/#')[0];
-                $http.post(apiEndpoint + "/login/", {
-                    username: this.form.username,
-                }).then(function (data) {
-                        console.log("Response from server:" + data.data);
-                    },
-                    function (error) {
-                        setErrorText(error.data);
-                        console.log(error.data);
-                    });
+                AuthService.login(this.form.username, (response) => {
+                    if (response.status === 200) {
+                        $location.path('/startpage');
+                    } else {
+                        setErrorText(response);
+                    }
+                });
+            };
+
+            this.logOut = function () {
+                setErrorText("");
+
+                AuthService.logout((response) => {
+                    console.log("Status: " + response.status);
+                    if (response.status === 200) {
+                        $location.path('/home');
+                    } else {
+                        setErrorText(response);
+                    }
+                });
             };
 
             function setErrorText(txt) {
@@ -28,7 +38,7 @@ angular.module('socialApp')
 
         controllerAs: 'homeCtr',
         templateUrl: './home.html',
-        params:{
+        params: {
             msg: ''
         }
 

@@ -28,16 +28,22 @@ class SignedKeyService {
     }
 
     public getUsersSignedKey(username: String, callback: (result: SignedKeyDTO) => void) {
-        kademlia.findValue(username, ValueTypeEnum.SIGNED_KEY, (signedKey, nodeId) => {
-            if (signedKey) {
-                console.log("Found a signed key: " + signedKey + "  nodeId: " + nodeId);
-                callback(signedKey)
-            } else {
-                console.log("Key not found");
-                callback(null);
-            }
-        });
-
+        let localKey = global.SignedKeyManager.findValueByNonHashedKey(username);
+        if (localKey) {
+            console.log("Key found in local store");
+            callback(localKey);
+        } else {
+            console.log("Looking for a key in the network");
+            kademlia.findValue(username, ValueTypeEnum.SIGNED_KEY, (signedKey, nodeId) => {
+                if (signedKey) {
+                    console.log("Found a signed key: " + signedKey + "  nodeId: " + nodeId);
+                    callback(signedKey)
+                } else {
+                    console.log("Key not found");
+                    callback(null);
+                }
+            });
+        }
     }
 
 

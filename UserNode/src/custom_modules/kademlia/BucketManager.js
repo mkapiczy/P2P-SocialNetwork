@@ -29,6 +29,10 @@ BucketManager.prototype.removeNodeFromTheBuckets = function (nodeToRemove) {
     }
 };
 BucketManager.prototype.calculateBucketIndexForANode = function (nodeId) {
+    console.log("Culculating bucket index from " + global.node.id + " to " + nodeId);
+    if (nodeId === global.node.id) {
+        nodeId++;
+    }
     return Math.floor(
         Math.log2(this.distanceBetweenTwoNodes(nodeId, global.node.id))
     );
@@ -82,7 +86,7 @@ BucketManager.prototype.getNodesNeighboursFromTheSameBucket = function (nodeId) 
     nodesFromTheNodeBucket = [];
     console.log("NodeId: " + nodeId);
     let bucketIndex = this.calculateBucketIndexForANode(nodeId);
-    console.log("BucketINdex: " + bucketIndex);
+    console.log("BucketIndex: " + bucketIndex);
     this.buckets[bucketIndex].nodesList.forEach(node => {
         if (node.id !== nodeId) {
             nodesFromTheNodeBucket.push(node);

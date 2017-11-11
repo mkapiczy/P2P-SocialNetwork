@@ -19,40 +19,49 @@ class LoginController {
 
     public login(request, response) {
         let username = request.body.username;
-        const userId = util.createHashFromKey(username, constants.B / 8);
 
-        global.privateKey = KeyFileStore.readPrivateKeyFromStore(userId);
+        if (username && username.toString() === "0") {
+            response.success = true;
+            response.status(200).send("Global node loged in");
+        } else {
+            const userId = util.createHashFromKey(username, constants.B / 8);
 
-        if (!global.privateKey) {
-            console.log('Private key does not exist for user ' + username + ' id: ' + userId);
-            response.status(404).send('Private key does not exist');
-            return;
-        }
-        global.node.setId(userId);
-        global.BucketManager.updateNodeInBuckets(global.baseNode);
-        communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
-            RegistrationService.isRegistered(userId, (isRegistered) => {
-                if (isRegistered) {
-                    global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
-                    if (global.publicKey) {
-                        response.status(HttpStatus).send('All good!');
-                        return
+            global.privateKey = KeyFileStore.readPrivateKeyFromStore(userId);
+
+            if (!global.privateKey) {
+                console.log('Private key does not exist for user ' + username + ' id: ' + userId);
+                response.status(404).send('Private key does not exist');
+                return;
+            }
+            console.log(username + '  ' + userId);
+            global.node.setId(userId);
+            console.log("Buckets before find node", global.BucketManager.buckets);
+            global.BucketManager.updateNodeInBuckets(global.baseNode);
+            console.log("Buckets before find node", global.BucketManager.buckets);
+            console.log("global node id " + global.node.id);
+            communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
+                RegistrationService.isRegistered(username, (isRegistered) => {
+                    if (isRegistered) {
+                        global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
+                        if (global.publicKey) {
+                            response.status(HttpStatus.OK).send('All good!');
+                        } else {
+                            SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
+                                if (signedKey) {
+                                    global.publicKey = signedKey.key;
+                                    KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value); //Todo not sure if signedKey.key.value is correctly received here
+                                    response.status(200).send('All good! Public Key found in network');
+                                } else {
+                                    response.status(404).send('Public Key not found in network');
+                                }
+                            });
+                        }
                     } else {
-                        SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
-                            if (signedKey) {
-                                global.publicKey = signedKey.key;
-                                KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value); //Todo not sure if signedKey.key.value is correctly received here
-                                response.status(200).send('All good! Public Key found in network');
-                            } else {
-                                response.status(404).send('Public Key not found in network');
-                            }
-                        });
+                        response.status(401).send('User is not yet approved');
                     }
-                } else {
-                    response.status(401).send('User is not yet approved');
-                }
+                });
             });
-        });
+        }
     }
 
 }

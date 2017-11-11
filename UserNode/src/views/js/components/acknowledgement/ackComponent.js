@@ -20,6 +20,17 @@ angular.module('socialApp')
                     self.messages = response.data.messages;
                 });
             };
+
+            this.processMessage = function (username) {
+                let apiEndpoint = $location.absUrl().split('/#')[0];
+                console.log(username);
+                $http.post(apiEndpoint + "/data/ack/process", {
+                    username: username,
+                    myUsername: 0
+                }).then(function (response) {
+                    console.log("Response from server:" + response.data);
+                });
+            };
         }],
 
         controllerAs: 'ackCtr',

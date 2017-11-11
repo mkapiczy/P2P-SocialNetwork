@@ -41,25 +41,33 @@ NodeCommunicator.prototype.findValue = function (name, valueType, callback) {
 
     sendAsyncFindNodes(alphaNodes, key, shortlist, null, resultShortlist => {
         let iterator = 0;
+
         askNodeForAValue(resultShortlist, iterator, key, valueType, callback);
+
     });
 };
 
 askNodeForAValue = function (shortlist, iterator, key, valueType, callback) {
     nodeToAsk = shortlist[iterator];
-    communicator.sendFindValue(nodeToAsk, key, valueType, value => {
-        if (value) {
-            callback(nodeToAsk.id, value);
-        } else {
-            if (iterator < shortlist.length - 1) {
-                iterator++;
-                askNodeForAValue(shortlist, iterator, key, valueType, callback);
+    console.log("Node to ask: " + nodeToAsk);
+    if(nodeToAsk) {
+        communicator.sendFindValue(nodeToAsk, key, valueType, value => {
+            if (value) {
+                callback(nodeToAsk.id, value);
             } else {
-                console.log("All nodes asked and no value found!");
-                callback(null, null);
+                if (iterator < shortlist.length - 1) {
+                    iterator++;
+                    askNodeForAValue(shortlist, iterator, key, valueType, callback);
+                } else {
+                    console.log("All nodes asked and no value found!");
+                    callback(null, null);
+                }
             }
-        }
-    });
+        });
+    } else{
+        console.log("No value found!");
+        callback(null, null);
+    }
 };
 
 sendAsyncFindNodes = function (alphaNodes, hashedKey, shortlist, currentClosestNode, callback) {

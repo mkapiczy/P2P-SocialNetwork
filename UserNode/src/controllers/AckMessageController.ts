@@ -29,19 +29,25 @@ class AckMessageController {
     getPendingMessagesNumber(request, response) {
         let username = request.query.username;
         let messages = AcknowledgementService.getPendingAcknowledgementMessages(username, (messages) => {
-            console.log(messages.length)
+            console.log(messages.length);
             response.json({"numberOfPendingMessages": messages.length});
         });
     };
 
     processUserAckMessages(request, response) {
-        let username = request.query.username;
+        let username = request.body.username;
+        let myUsername = request.body.myUsername;
         console.log("Process acknowledgement messages for: " + username);
-        AcknowledgementService.getPendingAcknowledgementMessages(username, (pendingAckMessages) => {
+        AcknowledgementService.getPendingAcknowledgementMessages(myUsername, (pendingAckMessages) => {
+            console.log("Pending messages: " + pendingAckMessages);
             if (pendingAckMessages) {
                 pendingAckMessages.forEach(msg => {
-                    AcknowledgementService.processAcknowledgementMessage(msg, username);
+                    if (msg.userData.username === username) {
+                        AcknowledgementService.processAcknowledgementMessage(msg, username);
+                    }
                 });
+            } else {
+                console.log("No messages for " + username);
             }
             response.send("");
         });
