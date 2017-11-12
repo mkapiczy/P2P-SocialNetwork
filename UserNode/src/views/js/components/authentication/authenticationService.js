@@ -30,9 +30,8 @@ function AuthService($http, $cookies, $rootScope, $location) {
         callback();
     }
 
-    function isAuthenticated(username) {
-        console.log("Is authenticated: " + $rootScope.globals.currentUser === username);
-        return $rootScope.globals.currentUser === username;
+    function isAuthenticated() {
+        return !!($rootScope.globals && $rootScope.globals.currentUser && $rootScope.globals.currentUser);
     }
 
 
