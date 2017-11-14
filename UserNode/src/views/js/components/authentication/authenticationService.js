@@ -20,9 +20,12 @@ function AuthService($http, $cookies, $rootScope, $location) {
         $http.post(apiEndpoint + "/login/", {
             username: username
         }).then(function (response) {
-            setCredentials(username);
-            callback(response);
-        });
+                setCredentials(username);
+                callback(response);
+            },
+            (error_response) => {
+                callback(error_response);
+            });
     }
 
     function logOut(callback) {

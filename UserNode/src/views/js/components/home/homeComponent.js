@@ -12,7 +12,7 @@ angular.module('socialApp')
                     if (response.status === 200) {
                         $location.path('/startpage');
                     } else {
-                        setErrorText(response);
+                        setErrorText(response.data);
                     }
                 });
             };
