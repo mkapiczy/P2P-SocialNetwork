@@ -9,9 +9,13 @@ Kademlia.prototype.storeValue = function (key, value, valueType, dataManager, ca
     console.log("Kademlia store value for key: " + key + " value: " + value);
     dataManager.storeValueWithKeyHashing(key, value);
     NodeCommunicator.publishToKNodesClosestToTheKey(key, value, valueType, closestNodes => {
-        let hashedKey = util.createHashFromKey(key, constants.B / 8);
-        closestNodes = global.BucketManager.sortNodesListByDistanceAscending(hashedKey, closestNodes);
-        callback(closestNodes[0]);
+        if (closestNodes.length > 0) {
+            let hashedKey = util.createHashFromKey(key, constants.B / 8);
+            closestNodes = global.BucketManager.sortNodesListByDistanceAscending(hashedKey, closestNodes);
+            callback(closestNodes[0]);
+        } else {
+            callback(false);
+        }
     });
 };
 

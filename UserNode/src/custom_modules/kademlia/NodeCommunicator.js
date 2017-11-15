@@ -11,7 +11,10 @@ NodeCommunicator.prototype.publishToKNodesClosestToTheKey = function (key, value
     let hashedKey = util.createHashFromKey(key, constants.B / 8);
     console.log("Publish key: " + hashedKey);
     let alphaNodes = global.BucketManager.getAlphaClosestNodes(hashedKey);
-    if (alphaNodes.length === 0) return;
+    if (alphaNodes.length === 0) {
+        callback([]);
+        return;
+    }
     sendAsyncFindNodes(alphaNodes, hashedKey, shortlist, null, resultShortlist => {
         let nodesToStoreValue = removeGlobalNodeFromShortlist(resultShortlist);
         sendStoreValueToAllNodesInTheShortlist(nodesToStoreValue, hashedKey, value, valueType, () => {

@@ -6,7 +6,7 @@ class DataRemovalService {
     constructor() {
     }
 
-    public removeRequestByUsername(username: String) {
+    public removeRequestsByUsername(username: String) {
         //Get all messages addressed to me
         let messages = global.AcknowledgmentRequestManager.findAllValuesForRelatedKeys(global.node.id);
         let msgNotFromUser = [];

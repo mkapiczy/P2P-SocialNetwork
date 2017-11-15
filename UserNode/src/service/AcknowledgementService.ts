@@ -43,13 +43,10 @@ class AcknowledgementService {
         console.log("Process ack: " + fromUsername);
         if (this.validateAcknowldgementUserData(userData)) {
             let signedKey = SignedKeyService.generateSignedKey(fromUsername, key);
-            SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, () => {
+            SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, (pushedToNetwork) => {
                 console.log("Signed Key for user " + userData.username + " published into the network");
-                // remove pending messages for this username
-                //Todo: insure we get here even though there er no nodes in buckets
+                DataRemovalService.removeRequestsByUsername(fromUsername);
             });
-            DataRemovalService.removeRequestByUsername(fromUsername);
-
         } else {
             console.log("I do not know this user: + " + userData.username + " !");
         }
