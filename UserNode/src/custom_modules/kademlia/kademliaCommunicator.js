@@ -169,6 +169,19 @@ exports.sendFindValue = function (recipientNode, key, valueType, callBack) {
     });
 };
 
+exports.fillUpYourBuckets = function () {
+    this.sendPing(global.node, global.baseNode, (result) => {
+        console.log(result);
+    });
+    this.sendGetClosestNodesRequest(global.node.id, global.baseNode, (closestNodes) => {
+        closestNodes.forEach(node => {
+            this.sendPing(global.node, node, (result) => {
+                console.log(result);
+            })
+        })
+    });
+};
+
 let createUriBasedOnValueType = function (valueType, recipientNode) {
     let uri = recipientNode.ipAddr + ":" + recipientNode.port;
     if (valueType === ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST) {

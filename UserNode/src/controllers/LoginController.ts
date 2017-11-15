@@ -25,7 +25,6 @@ class LoginController {
             response.status(200).send("Global node loged in");
         } else {
             const userId = util.createHashFromKey(username, constants.B / 8);
-
             global.privateKey = KeyFileStore.readPrivateKeyFromStore(userId);
 
             if (!global.privateKey) {
@@ -33,23 +32,24 @@ class LoginController {
                 response.status(404).send('Private key does not exist');
                 return;
             }
-            console.log(username + '  ' + userId);
             global.node.setId(userId);
-            console.log("Buckets before find node", global.BucketManager.buckets);
             global.BucketManager.updateNodeInBuckets(global.baseNode);
-            console.log("Buckets before find node", global.BucketManager.buckets);
-            console.log("global node id " + global.node.id);
+
             communicator.sendFindNode(global.node.id, global.baseNode, function (result) {
                 RegistrationService.isRegistered(username, (isRegistered) => {
                     if (isRegistered) {
                         global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
                         if (global.publicKey) {
                             response.status(HttpStatus.OK).send('All good!');
+                            communicator.fillUpYourBuckets();
                         } else {
                             SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
                                 if (signedKey) {
                                     global.publicKey = signedKey.key;
-                                    KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value); //Todo not sure if signedKey.key.value is correctly received here
+                                    KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value);
+
+                                    communicator.fillUpYourBuckets();
+
                                     response.status(200).send('All good! Public Key found in network');
                                 } else {
                                     response.status(404).send('Public Key not found in network');
