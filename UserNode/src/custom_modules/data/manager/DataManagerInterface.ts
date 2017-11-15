@@ -8,4 +8,6 @@ interface DataManagerInterface {
     findValueByNonHashedKey(key: String);
 
     findValueByHashedKey(key: String);
+
+    deleteValueWithKeyHashing(key: string);
 }

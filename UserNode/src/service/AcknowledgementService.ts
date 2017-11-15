@@ -4,6 +4,8 @@ import {UserDataDTO} from "../custom_modules/data/entity/dto/UserDataDTO";
 import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
 import SignedKeyService from "./SignedKeyService";
 import KademliaMsgManager from '../custom_modules/kademlia/KademliaValueManager'
+import {KeyDTO} from "../custom_modules/data/entity/dto/KeyDTO";
+import DataRemovalService from "./DataRemovalService";
 
 const Kademlia = require("../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
@@ -13,8 +15,9 @@ class AcknowledgementService {
     constructor() {
     }
 
-    public publiskAcknowledgementRequestMsgIntoTheNetwork(key: String, ackMsg: AcknowledgmentRerquestMsg, callback) {
-        KademliaMsgManager.getAvailableKey(key, 0, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (availableKey) => {
+    public publiskAcknowledgementRequestMsgIntoTheNetwork(approverId: String, key: KeyDTO, userData: UserDataDTO, callback) {
+        KademliaMsgManager.getAvailableKey(approverId, 0, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (availableKey) => {
+            let ackMsg = new AcknowledgmentRerquestMsg(availableKey, key, userData);
             console.log("Value stored with the key " + availableKey);
             kademlia.storeValue(availableKey, ackMsg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, () => {
                 callback();
@@ -34,15 +37,19 @@ class AcknowledgementService {
         }
     }
 
-    public processAcknowledgementMessage(ackMsg: AcknowledgmentRerquestMsg, myUsername: String): void {
+    public processAcknowledgementMessage(ackMsg: AcknowledgmentRerquestMsg, fromUsername: String): void {
         let key = ackMsg.key;
         let userData = ackMsg.userData;
+        console.log("Process ack: " + fromUsername);
         if (this.validateAcknowldgementUserData(userData)) {
-            let signedKey = SignedKeyService.generateSignedKey(myUsername, key);
+            let signedKey = SignedKeyService.generateSignedKey(fromUsername, key);
             SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, () => {
                 console.log("Signed Key for user " + userData.username + " published into the network");
                 // remove pending messages for this username
-            })
+                //Todo: insure we get here even though there er no nodes in buckets
+            });
+            DataRemovalService.removeRequestByUsername(fromUsername);
+
         } else {
             console.log("I do not know this user: + " + userData.username + " !");
         }

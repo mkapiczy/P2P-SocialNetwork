@@ -24,6 +24,11 @@ class AcknowledgmentRequestManager implements DataManagerInterface {
         return this.dataStorage.get(key);
     }
 
+    deleteValueWithKeyHashing(key: string) {
+        let hashedKey = util.createHashFromKey(key, constants.B / 8);
+        this.dataStorage.delete(hashedKey);
+    }
+
     findAllValuesForRelatedKeys(parentKey: String,): Array<AcknowledgmentRerquestMsg> {
         let resultMessages = [];
         let msgIterator = 0;

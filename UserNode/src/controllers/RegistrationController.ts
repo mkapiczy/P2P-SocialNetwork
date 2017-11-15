@@ -3,7 +3,6 @@ import {KeyGenerator} from "../custom_modules/crypto/KeyGenerator";
 import {KeyFileStore} from "../custom_modules/crypto/KeyFileStore";
 import {KeyDTO} from "../custom_modules/data/entity/dto/KeyDTO";
 import {KeyType} from "../custom_modules/enum/KeyTypeEnum";
-import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
 import {UserDataDTO} from "../custom_modules/data/entity/dto/UserDataDTO";
 import AcknowldgementService from "../service/AcknowledgementService"
 import RegistrationService from "../service/RegistrationService";
@@ -50,8 +49,7 @@ class RegistrationController {
                     let publicKey = KeyFileStore.readPublicKeyFromStore(userId);
                     let key = new KeyDTO(publicKey.toString(), KeyType.GLOBAL);
                     let userData = new UserDataDTO(username);
-                    let acknowledgmentRerquestMsg = new AcknowledgmentRerquestMsg(key, userData);
-                    AcknowldgementService.publiskAcknowledgementRequestMsgIntoTheNetwork(approver, acknowledgmentRerquestMsg, () => {
+                    AcknowldgementService.publiskAcknowledgementRequestMsgIntoTheNetwork(approver, key, userData, () => {
                         response.status(HttpStatus.OK).json({username: username});
                     });
                 }

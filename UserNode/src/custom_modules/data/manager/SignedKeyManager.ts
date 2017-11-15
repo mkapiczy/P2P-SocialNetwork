@@ -22,6 +22,10 @@ class SignedKeyManager implements DataManagerInterface {
     findValueByHashedKey(key: String): SignedKeyDTO {
         return this.dataStorage.get(key);
     }
+
+    deleteValueWithKeyHashing(key: string) {
+        this.dataStorage.delete(key);
+    }
 }
 
 export default new SignedKeyManager();
