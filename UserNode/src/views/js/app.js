@@ -30,6 +30,12 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
             component: 'ackComponent',
             authenticate: true
         })
+
+        .state('chat', {
+            url: '/chat',
+            component: 'chatComponent',
+            authenticate: true
+        })
 });
 
 app.run(function ($transitions, $location) {

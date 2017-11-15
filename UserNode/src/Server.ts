@@ -32,6 +32,7 @@ class Server {
         this.express.use(express.static(path.join(__dirname, "/views/js/components/start")));        
         this.express.use(express.static(path.join(__dirname, "/views/js/components/acknowledgement")));
         this.express.use(express.static(path.join(__dirname, "/views/js/components/authentication")));
+        this.express.use(express.static(path.join(__dirname, "/views/js/components/chat")));
         this.express.use(express.static(path.join(__dirname, "/views/css")));
         this.express.set("view engine", "pug");
     }
