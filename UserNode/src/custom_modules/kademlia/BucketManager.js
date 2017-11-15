@@ -1,5 +1,6 @@
 const constants = require("../../config/constants");
 const KBucket = require("./kbucket");
+const Node = require("./node");
 
 function BucketManager() {
     this.buckets = [];
