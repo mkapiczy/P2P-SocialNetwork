@@ -49,7 +49,7 @@ class KademliaController {
             request.body.nodePort
         );
 
-        kademlia.getKClosestNodes(request.params.id, requestNode, (closestNodes) => {
+        kademlia.getKClosestNodes(Number(request.params.id), requestNode, (closestNodes) => {
             response.status(HttpStatus.OK);
             response.setHeader("Content-Type", "application/json");
             response.json({
