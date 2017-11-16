@@ -6,10 +6,13 @@ export class AcknowledgmentRerquestMsg {
     key: KeyDTO;
     userData: UserDataDTO;
 
+    private isValid: boolean; //Flag indicating whether message has been removed from network (soft delete)
+
     constructor(id: String, key: KeyDTO, userData: UserDataDTO) {
         this.id = id;
         this.key = key;
         this.userData = userData;
+        this.isValid = true;
     }
 
     setId(id: String) {

@@ -43,7 +43,7 @@ class AcknowledgementService {
         console.log("Process ack: " + fromUsername);
         if (this.validateAcknowldgementUserData(userData)) {
             let signedKey = SignedKeyService.generateSignedKey(fromUsername, key);
-            SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, (pushedToNetwork) => {
+            SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, () => {
                 console.log("Signed Key for user " + userData.username + " published into the network");
                 DataRemovalService.removeRequestsByUsername(fromUsername);
             });

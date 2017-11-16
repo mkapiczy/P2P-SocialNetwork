@@ -185,6 +185,26 @@ sendStoreValueToAllNodesInTheShortlist = function (shortlist, hashedKey, value, 
     });
 };
 
+sendRemoveValueToAllNodesInTheShortlist = function (shortlist, hashedKey, value, valueType, callback) {
+    let asyncCallsArray = [];
+    shortlist.forEach(node => {
+        asyncCallsArray.push(function (callback) {
+            communicator.sendRemoveValue(node, hashedKey, value, valueType, result => {
+                callback(null, result);
+            });
+        });
+    });
+
+    async.parallel(asyncCallsArray, (error, result) => {
+        if (error) {
+            console.log("Error occured: ", error);
+        } else {
+            console.log("Results in data publisher: " + result);
+            callback();
+        }
+    });
+};
+
 selectAlphaClosestNodes = function (closestNodes, hashedKey) {
     closestNodes = global.BucketManager.sortNodesListByDistanceAscending(
         hashedKey,

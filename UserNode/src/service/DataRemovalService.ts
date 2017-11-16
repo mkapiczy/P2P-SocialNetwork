@@ -1,5 +1,8 @@
 import {Request, Response, Router} from 'express';
-import {AcknowledgmentRerquestMsg} from "../custom_modules/data/message/AcknowledgementRequestMsg";
+import {ValueTypeEnum} from "../custom_modules/enum/ValueTypeEnum";
+
+const Kademlia = require("../custom_modules/kademlia/kademlia");
+const kademlia = new Kademlia();
 
 class DataRemovalService {
 
@@ -9,26 +12,18 @@ class DataRemovalService {
     public removeRequestsByUsername(username: String) {
         //Get all messages addressed to me
         let messages = global.AcknowledgmentRequestManager.findAllValuesForRelatedKeys(global.node.id);
-        let msgNotFromUser = [];
+        let msgFromUser = [];
 
         messages.forEach((msg) => {
-            if (msg.userData.username != username) {
-                msgNotFromUser.push(msg);
+            if (msg.userData.username == username) {
+                msgFromUser.push(msg);
             }
         });
 
-        messages.forEach((msg) => {
-            console.log("Delete ack with key:" + msg.id);
-            global.AcknowledgmentRequestManager.deleteValueWithKeyHashing(msg.id);
-        });
-
-        let iterator = 0;
-        msgNotFromUser.forEach((msg: AcknowledgmentRerquestMsg) => {
-            let nextId = global.node.id+iterator.toString();
-            console.log("Data Removal, next id: " + nextId);
-            let nextMsg = new AcknowledgmentRerquestMsg(nextId, msg.key, msg.userData);
-            global.AcknowledgmentRequestManager.storeValueWithKeyHashing(nextId, nextMsg);
-            iterator++;
+        msgFromUser.forEach((msg) => {
+            kademlia.removeValue(msg.id, msg, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, global.AcknowledgmentRequestManager, () => {
+                console.log("Removed message: " + msg.id);
+            });
         });
     }
 

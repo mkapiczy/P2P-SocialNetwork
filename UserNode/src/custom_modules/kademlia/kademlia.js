@@ -42,6 +42,12 @@ Kademlia.prototype.handlePing = function (node, callback) {
     callback();
 };
 
+Kademlia.prototype.removeValue = function (key, msg, valueType, datamanager, callback) {
+    msg.isValid = false;
+    this.storeValue(key, msg, valueType, datamanager, callback);
+
+};
+
 Kademlia.prototype.isGlobalNodeTheClosest = function (endpoint, callback) {
     NodeCommunicator.findClosestNodeToTheKye(endpoint, (closestNode) => {
         callback(closestNode.id === global.node.id);

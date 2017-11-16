@@ -24,11 +24,6 @@ class AcknowledgmentRequestManager implements DataManagerInterface {
         return this.dataStorage.get(key);
     }
 
-    deleteValueWithKeyHashing(key: string) {
-        let hashedKey = util.createHashFromKey(key, constants.B / 8);
-        this.dataStorage.delete(hashedKey);
-    }
-
     findAllValuesForRelatedKeys(parentKey: String,): Array<AcknowledgmentRerquestMsg> {
         let resultMessages = [];
         let msgIterator = 0;
@@ -37,7 +32,7 @@ class AcknowledgmentRequestManager implements DataManagerInterface {
             let key = parentKey + msgIterator.toString();
             console.log("Local " + key);
             msg = this.findValueByNonHashedKey(key);
-            if (msg) {
+            if (msg && msg.isValid) {
                 resultMessages.push(msg);
             }
             msgIterator++;
