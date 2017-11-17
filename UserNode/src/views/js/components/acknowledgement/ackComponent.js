@@ -21,13 +21,15 @@ angular.module('socialApp')
                 });
             };
 
-            this.processMessage = function (username) {
+            this.processMessage = function (username, index, isConfirmed) {
                 let apiEndpoint = $location.absUrl().split('/#')[0];
                 console.log(username);
                 $http.post(apiEndpoint + "/data/ack/process", {
                     username: username,
                     myUsername: $rootScope.globals.currentUser.username,
+                    isConfirmed: isConfirmed
                 }).then(function (response) {
+                    self.messages.splice(index, 1);
                     console.log("Response from server:" + response.data);
                 });
             };

@@ -37,16 +37,21 @@ class AcknowledgementService {
         }
     }
 
-    public processAcknowledgementMessage(ackMsg: AcknowledgmentRerquestMsg, fromUsername: String): void {
+    public processAcknowledgementMessage(ackMsg: AcknowledgmentRerquestMsg, fromUsername: String, isConfirmed: boolean): void {
         let key = ackMsg.key;
         let userData = ackMsg.userData;
         console.log("Process ack: " + fromUsername);
         if (this.validateAcknowldgementUserData(userData)) {
-            let signedKey = SignedKeyService.generateSignedKey(fromUsername, key);
-            SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, () => {
-                console.log("Signed Key for user " + userData.username + " published into the network");
+            if (isConfirmed) {
+                let signedKey = SignedKeyService.generateSignedKey(fromUsername, key);
+                SignedKeyService.publishSignedKeyIntoTheNetwork(userData.username, signedKey, () => {
+                    console.log("Signed Key for user " + userData.username + " published into the network");
+                    DataRemovalService.removeRequestsByUsername(fromUsername);
+                });
+            } else {
                 DataRemovalService.removeRequestsByUsername(fromUsername);
-            });
+            }
+
         } else {
             console.log("I do not know this user: + " + userData.username + " !");
         }

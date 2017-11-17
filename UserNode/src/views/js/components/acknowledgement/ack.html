@@ -38,7 +38,8 @@
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="msg in ackCtr.messages">
                     {{msg.userData.username}}
-                    <button class="btn-success" ng-click="ackCtr.processMessage(msg.userData.username)">Confirm</button>
+                    <button class="btn-success" ng-click="ackCtr.processMessage(msg.userData.username,$index, true)">Confirm</button>
+                    <button class="btn-danger" ng-click="ackCtr.processMessage(msg.userData.username,$index, false)">Decline</button>
                 </li>
             </ul>
         </div>

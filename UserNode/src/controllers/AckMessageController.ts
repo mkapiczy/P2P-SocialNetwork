@@ -37,13 +37,14 @@ class AckMessageController {
     processUserAckMessages(request, response) {
         let username = request.body.username;
         let myUsername = request.body.myUsername;
+        let isConfirmed = request.body.isConfirmed;
         console.log("Process acknowledgement messages for: " + username);
         AcknowledgementService.getPendingAcknowledgementMessages(myUsername, (pendingAckMessages) => {
             console.log("Pending messages: " + pendingAckMessages);
             if (pendingAckMessages) {
                 pendingAckMessages.forEach(msg => {
                     if (msg.userData.username === username) {
-                        AcknowledgementService.processAcknowledgementMessage(msg, username);
+                        AcknowledgementService.processAcknowledgementMessage(msg, username, isConfirmed);
                     }
                 });
             } else {
