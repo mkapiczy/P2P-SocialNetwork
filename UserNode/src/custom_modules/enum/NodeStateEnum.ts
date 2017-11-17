@@ -1,4 +1,4 @@
 export enum NodeStateEnum {
-    ALIVE,
-    NOT_ALIVE
+    ALIVE = 1,
+    NOT_ALIVE = 0
 }
