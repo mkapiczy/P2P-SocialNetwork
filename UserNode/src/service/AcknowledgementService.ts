@@ -28,7 +28,7 @@ class AcknowledgementService {
 
     public getPendingAcknowledgementMessages(myUsername: String, callback: (result: Array<AcknowledgmentRerquestMsg>) => void) {
         let localMessages = global.AcknowledgmentRequestManager.findAllValuesForRelatedKeys(myUsername);
-        if (localMessages) {
+        if (localMessages && localMessages.length > 0) {
             callback(localMessages);
         } else {
             KademliaMsgManager.getAllValuesForRelatedKeys(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages) => {
