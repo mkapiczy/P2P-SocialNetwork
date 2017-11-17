@@ -8,6 +8,7 @@ angular.module('socialApp')
 
         controller: ['$http', '$location', '$cookies', '$state', function ($http, $location, $cookies, $state) {
             this.register = function () {
+                document.getElementById("registerBtn").disabled = true;
                 console.log("Username: " + this.form.username);
                 console.log("Approver: " + this.form.approver);
                 // TODO Very bad hack, this should be in configuration but for easier testing we read the port in node.js from console.
@@ -18,6 +19,7 @@ angular.module('socialApp')
                     username: this.form.username,
                     approver: this.form.approver
                 }).then(function (data) {
+                    document.getElementById("registerBtn").disabled = false;
                     console.log("Response from server:" + data.data.message);
                     $cookies.put("username_" + port, data.data.username);
                     $state.go('home', {msg: "Registered. Wait for approbal"});
