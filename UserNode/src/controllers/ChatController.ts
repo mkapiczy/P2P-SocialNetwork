@@ -60,6 +60,8 @@ class ChatController {
         console.log("Send message " + message + " to " + recipientUsername);
         ChatService.publishChatMsgIntoTheNetwork(recipientUsername, message, () => {
             console.log("Message sent");
+            response.status(HttpStatus.OK);
+            response.send("Message sent");
         })
     }
 
