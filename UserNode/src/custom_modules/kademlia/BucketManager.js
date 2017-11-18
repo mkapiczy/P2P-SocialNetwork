@@ -15,7 +15,7 @@ BucketManager.prototype.printBuckets = function () {
 };
 
 BucketManager.prototype.updateNodeInBuckets = function (nodeToUpdate) {
-    nodeToUpdate = new Node(nodeToUpdate.id, nodeToUpdate.ipAddr, nodeToUpdate.port);
+    nodeToUpdate = new Node(nodeToUpdate.username, nodeToUpdate.id, nodeToUpdate.ipAddr, nodeToUpdate.port);
     if (nodeToUpdate.isValid() && nodeToUpdate.id !== global.node.id) {
         let bucketIndex = this.calculateBucketIndexForANode(nodeToUpdate.id);
         this.buckets[bucketIndex].update(nodeToUpdate);

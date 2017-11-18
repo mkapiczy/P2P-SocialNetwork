@@ -5,8 +5,8 @@ class SignedKeyController {
     router: Router = Router();
 
     constructor() {
-        this.router.get("/key", this.getPublicKey);
-        this.router.post("/key", this.storePublicKey);
+        this.router.get("/", this.getPublicKey);
+        this.router.post("/", this.storePublicKey);
     }
 
     getPublicKey(request, response) {

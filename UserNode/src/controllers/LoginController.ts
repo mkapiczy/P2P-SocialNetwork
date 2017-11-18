@@ -33,6 +33,8 @@ class LoginController {
                 return;
             }
             global.node.setId(userId);
+            global.node.setUsername(username);
+
             global.BucketManager.updateNodeInBuckets(global.baseNode);
 
             communicator.sendFindNode(global.node.id, global.baseNode, function (result) {

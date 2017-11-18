@@ -2,6 +2,7 @@ const Kademlia = require("./kademlia");
 const kademlia = new Kademlia();
 
 class KademliaValueManager {
+
     public getAvailableKey(key, keyIteration, valueType, callback) {
         let callKey = key + keyIteration.toString();
         console.log("Call key " + callKey + " check");

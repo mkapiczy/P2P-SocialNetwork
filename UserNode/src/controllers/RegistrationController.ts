@@ -29,15 +29,12 @@ class RegistrationController {
     };
 
     post(request, response) {
-        // we get the form data from the view
         let username = request.body.username;
         let approver = request.body.approver;
-        console.log("Username received: " + request.body.username);
-        console.log("Username received: " + request.body.approver);
-        // generate public private key
 
         const userId = util.createHashFromKey(username, constants.B / 8);
         global.node.setId(userId);
+        global.node.setUsername(username);
         global.BucketManager.updateNodeInBuckets(global.baseNode);
 
         communicator.sendFindNode(global.node.id, global.baseNode, function (result) {

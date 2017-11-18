@@ -9,6 +9,7 @@ import KademliaController from "./controllers/KademliaController";
 import RegistrationController from "./controllers/RegistrationController";
 import SignedKeyController from "./controllers/SignedKeyController";
 import LoginController from "./controllers/LoginController";
+import ChatController from "./controllers/ChatController";
 
 class Server {
     // ref to Express instance
@@ -29,7 +30,7 @@ class Server {
         this.express.use(express.static(path.join(__dirname, "/views")));
         this.express.use(express.static(path.join(__dirname, "/views/js/components/registration")));
         this.express.use(express.static(path.join(__dirname, "/views/js/components/home")));
-        this.express.use(express.static(path.join(__dirname, "/views/js/components/start")));        
+        this.express.use(express.static(path.join(__dirname, "/views/js/components/start")));
         this.express.use(express.static(path.join(__dirname, "/views/js/components/acknowledgement")));
         this.express.use(express.static(path.join(__dirname, "/views/js/components/authentication")));
         this.express.use(express.static(path.join(__dirname, "/views/js/components/chat")));
@@ -43,8 +44,9 @@ class Server {
         this.express.use('/', IndexController);
         this.express.use('/register', RegistrationController);
         this.express.use('/api/kademlia', KademliaController);
-        this.express.use('/data', AckMessageController);
-        this.express.use('/data', SignedKeyController);
+        this.express.use('/data/ack', AckMessageController);
+        this.express.use('/data/chat', ChatController);
+        this.express.use('/data/key', SignedKeyController);
         this.express.use('/login', LoginController)
     }
 

@@ -23,7 +23,7 @@ Kademlia.prototype.findValue = function (key, valueType, callback) {
     NodeCommunicator.findValue(key, valueType, (nodeId, value) => {
         if (value) {
             console.log("Value for the key " + key + " found in node " + nodeId);
-            console.log("Value: " + value);
+            console.log("Value: " + JSON.stringify(value));
             callback(value, nodeId);
         } else {
             console.log("Value for the key " + key + " not found!");

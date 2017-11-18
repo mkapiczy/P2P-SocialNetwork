@@ -4,6 +4,7 @@ declare namespace NodeJS {
         node: any,
         BucketManager: any,
         AcknowledgmentRequestManager: any,
+        ChatMsgManager: any,
         SignedKeyManager: any,
         publicKey: any,
         privateKey: any

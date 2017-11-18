@@ -10,6 +10,7 @@ exports.sendPing = function (senderNode, nodeToPing, callBack) {
         method: "GET",
         uri: nodeToPing.ipAddr + ":" + nodeToPing.port + "/api/kademlia/info/ping",
         body: {
+            nodeUsername: senderNode.username,
             nodeId: senderNode.id,
             nodeIP: senderNode.ipAddr,
             nodePort: senderNode.port,
@@ -29,7 +30,7 @@ exports.sendPing = function (senderNode, nodeToPing, callBack) {
             let responseRpcId = response.body.rpcId;
             if (responseRpcId === requestRpcId) {
                 console.log("Now I ping: " + nodeToPing.port);
-                let nodeToUpdate = new Node(nodeToPing.id, nodeToPing.ipAddr, nodeToPing.port);
+                let nodeToUpdate = new Node(nodeToPing.username, nodeToPing.id, nodeToPing.ipAddr, nodeToPing.port);
                 global.BucketManager.updateNodeInBuckets(nodeToUpdate);
                 callBack(NodeStateEnum.ALIVE);
             }
@@ -48,6 +49,7 @@ exports.sendFindNode = function (closestToId, recipientNode, callBack) {
         recipientNode.port +
         "/api/kademlia/nodes/" + closestToId,
         body: {
+            nodeUsername: global.node.username,
             nodeId: global.node.id,
             nodeIP: global.node.ipAddr,
             nodePort: global.node.port,
@@ -149,6 +151,7 @@ exports.sendFindValue = function (recipientNode, key, valueType, callBack) {
         method: "GET",
         uri: uri,
         body: {
+            nodeUsername: global.node.username,
             nodeId: global.node.id,
             nodeIP: global.node.ipAddr,
             nodePort: global.node.port,
@@ -188,6 +191,8 @@ let createUriBasedOnValueType = function (valueType, recipientNode) {
         uri += "/data/ack";
     } else if (valueType === ValueTypeEnum.SIGNED_KEY) {
         uri += "/data/key";
+    } else if (valueType === ValueTypeEnum.CHAT_MSG) {
+        uri += "/data/chat";
     }
     return uri;
 };

@@ -1,4 +1,5 @@
-function Node(id, ipAddr, port) {
+function Node(username, id, ipAddr, port) {
+    this.username = username;
     this.id = id;
     this.ipAddr = ipAddr;
     this.port = port;
@@ -6,6 +7,10 @@ function Node(id, ipAddr, port) {
 
 Node.prototype.setId = function (id) {
     this.id = id;
+};
+
+Node.prototype.setUsername = function (username) {
+    this.username = username;
 };
 
 Node.prototype.isValid = function () {

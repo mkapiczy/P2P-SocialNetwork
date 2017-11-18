@@ -7,11 +7,11 @@ class AckMessageController {
     router: Router = Router();
 
     constructor() {
-        this.router.get("/ack", this.getAckMessage);
-        this.router.get("/ack/pending/messages", this.getPendingMessages);
-        this.router.get("/ack/pending/number", this.getPendingMessagesNumber);
-        this.router.post("/ack", this.storeAckMessage);
-        this.router.post("/ack/process", this.processUserAckMessages);
+        this.router.get("/", this.getAckMessage);
+        this.router.get("/pending/messages", this.getPendingMessages);
+        this.router.get("/pending/number", this.getPendingMessagesNumber);
+        this.router.post("/", this.storeAckMessage);
+        this.router.post("/process", this.processUserAckMessages);
     }
 
     getAckMessage(request, response) {

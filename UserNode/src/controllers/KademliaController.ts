@@ -22,6 +22,7 @@ class KademliaController {
         console.log("Ping message from node ", request.body.nodeId);
         console.log("Buckets", global.BucketManager.buckets);
         let requestNode = new Node(
+            request.body.nodeUsername,
             request.body.nodeId,
             request.body.nodeIP,
             request.body.nodePort
@@ -44,6 +45,7 @@ class KademliaController {
         console.log("closest to ", request.params.id);
         console.log("Buckets", global.BucketManager.buckets);
         let requestNode = new Node(
+            request.body.nodeUsername,
             request.body.nodeId,
             request.body.nodeIP,
             request.body.nodePort
