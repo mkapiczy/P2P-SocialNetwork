@@ -14,7 +14,7 @@ class ChatService {
 
     public publishChatMsgIntoTheNetwork(recipientUsername: String, message: String, callback) {
         let senderUsername = global.node.username;
-        let key = senderUsername + "-" + recipientUsername;
+        let key = senderUsername + recipientUsername;
         console.log("Publish key " + key);
         KademliaValueManager.getAvailableKey(key, 0, ValueTypeEnum.CHAT_MSG, (availableKey) => {
             console.log("Value stored with the key " + availableKey);
@@ -51,14 +51,12 @@ class ChatService {
 
     private getChatMessages(fromUsername: String, toUsername: String, callback: (result: Array<ChatMsg>) => void) {
         let messages = [];
-        console.log("From user " + fromUsername);
-        console.log("To user " + toUsername);
 
-        let key = fromUsername + "-" + toUsername;
+        let key = fromUsername + "" + toUsername;
         console.log("Get msg key " + key);
         let localMessages = global.ChatMsgManager.findAllValuesForRelatedKeys(key);
         if (localMessages) {
-            console.log("Found local messages " +  JSON.stringify(localMessages));
+            console.log("Found local messages " + JSON.stringify(localMessages));
             messages = messages.concat(localMessages);
         }
         KademliaValueManager.getAllValuesForRelatedKeys(key, ValueTypeEnum.CHAT_MSG, (networkmessages) => {
