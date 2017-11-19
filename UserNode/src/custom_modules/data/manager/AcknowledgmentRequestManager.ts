@@ -24,7 +24,7 @@ class AcknowledgmentRequestManager implements DataManagerInterface {
         return this.dataStorage.get(key);
     }
 
-    findAllValuesForRelatedKeys(parentKey: String,): Array<AcknowledgmentRerquestMsg> {
+    findAllValuesForRelatedKeys(parentKey: String): Array<AcknowledgmentRerquestMsg> {
         let resultMessages = [];
         let msgIterator = 0;
         let msg;

@@ -11,7 +11,7 @@ class DataRemovalService {
 
     public removeRequestsByUsername(username: String) {
         //Get all messages addressed to me
-        let messages = global.AcknowledgmentRequestManager.findAllValuesForRelatedKeys(global.node.id);
+        let messages = global.AcknowledgmentRequestManager.findAllValuesForRelatedKeys(global.node.username);
         let msgFromUser = [];
 
         messages.forEach((msg) => {
