@@ -32,7 +32,8 @@ class AcknowledgementService {
             callback(localMessages);
         } else {
             KademliaMsgManager.getAllValuesForRelatedKeys(myUsername, ValueTypeEnum.ACKNOWLEDGEMENT_REQUEST, (messages) => {
-                callback(messages);
+                this.addMessagesToLocalBucket(messages);
+                callback(this.removeInvalidMessages(messages));
             });
         }
     }
@@ -65,6 +66,24 @@ class AcknowledgementService {
             } else {
                 callback(false);
             }
+        });
+    }
+
+    private removeInvalidMessages(messages: Array<AcknowledgmentRerquestMsg>) {
+        let validMessages = [];
+        if (messages && messages.length > 0) {
+            messages.forEach((msg) => {
+                if (msg.isValid) {
+                    validMessages.push(msg);
+                }
+            });
+        }
+        return validMessages;
+    }
+
+    private addMessagesToLocalBucket (messages) {
+        messages.forEach((msg) => {
+            global.AcknowledgmentRequestManager.storeValueWithKeyHashing(msg.id, msg);
         });
     }
 

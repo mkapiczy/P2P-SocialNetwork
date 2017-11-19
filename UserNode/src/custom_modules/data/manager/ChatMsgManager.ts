@@ -26,7 +26,7 @@ class ChatMsgManager implements DataManagerInterface {
         return this.dataStorage.get(key);
     }
 
-    findAllValuesForRelatedKeys(parentKey: String,): Array<ChatMsg> {
+    findAllValuesForRelatedKeys(parentKey: String): Array<ChatMsg> {
         let resultMessages = [];
         let msgIterator = 0;
         let msg;
