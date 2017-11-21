@@ -35,14 +35,11 @@ NodeCommunicator.prototype.findClosestNodeToTheKye = function (key, callback) {
     });
 };
 
-NodeCommunicator.prototype.findValue = function (name, valueType, callback, hashed = false) {
+NodeCommunicator.prototype.findValue = function (name, valueType, callback) {
     console.log("Name is: " + name);
     let key;
-    if (!hashed) {
-        key = util.createHashFromKey(name, constants.B / 8);
-    } else {
-        key = name;
-    }
+    key = util.createHashFromKey(name, constants.B / 8);
+
     console.log("The key is: " + key);
     let shortlist = [];
     let alphaNodes = global.BucketManager.getAlphaClosestNodes(key);
@@ -58,7 +55,7 @@ NodeCommunicator.prototype.findValue = function (name, valueType, callback, hash
 askNodeForAValue = function (shortlist, iterator, key, valueType, callback) {
     nodeToAsk = shortlist[iterator];
     console.log("Node to ask: " + nodeToAsk);
-    if(nodeToAsk) {
+    if (nodeToAsk) {
         communicator.sendFindValue(nodeToAsk, key, valueType, value => {
             if (value) {
                 callback(nodeToAsk.id, value);
@@ -72,7 +69,7 @@ askNodeForAValue = function (shortlist, iterator, key, valueType, callback) {
                 }
             }
         });
-    } else{
+    } else {
         console.log("No value found!");
         callback(null, null);
     }

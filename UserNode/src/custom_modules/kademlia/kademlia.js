@@ -19,7 +19,7 @@ Kademlia.prototype.storeValue = function (key, value, valueType, dataManager, ca
     });
 };
 
-Kademlia.prototype.findValue = function (key, valueType, callback, hashed = false) {
+Kademlia.prototype.findValue = function (key, valueType, callback) {
     NodeCommunicator.findValue(key, valueType, (nodeId, value) => {
         if (value) {
             console.log("Value for the key " + key + " found in node " + nodeId);
@@ -29,7 +29,7 @@ Kademlia.prototype.findValue = function (key, valueType, callback, hashed = fals
             console.log("Value for the key " + key + " not found!");
             callback("", "");
         }
-    }, hashed);
+    });
 };
 
 Kademlia.prototype.getKClosestNodes = function (id, requestNode, callback) {

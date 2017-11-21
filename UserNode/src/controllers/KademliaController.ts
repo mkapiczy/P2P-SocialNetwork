@@ -28,7 +28,7 @@ class KademliaController {
             request.body.nodePort
         );
 
-        SignedKeyService.isUserPublicKeyValid(requestNode.id, (isValid) => {
+        SignedKeyService.isUserPublicKeyValid(requestNode.username, (isValid) => {
             if (isValid) {
                 kademlia.handlePing(requestNode, () => {
                     response.status(HttpStatus.OK);

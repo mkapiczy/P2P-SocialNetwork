@@ -7,7 +7,7 @@ class RegistrationService {
     }
 
     public isRegistered(username: String, callback: (result: Boolean) => void) {
-        SignedKeyService.getUsersSignedKey(username, false, (signedKey) => {
+        SignedKeyService.getUsersSignedKey(username, (signedKey) => {
             if (signedKey) {
                 console.log("User is acknowledged: " + signedKey);
                 callback(true)

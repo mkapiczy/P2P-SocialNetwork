@@ -59,7 +59,7 @@ class AcknowledgementService {
     }
 
     public isAcknowledged(username: String, callback: (result: Boolean) => void) {
-        SignedKeyService.getUsersSignedKey(username, true, (signedKey) => {
+        SignedKeyService.getUsersSignedKey(username, (signedKey) => {
             if (signedKey) {
                 console.log("User is acknowledged: " + signedKey);
                 callback(true)

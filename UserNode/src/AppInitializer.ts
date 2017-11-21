@@ -9,7 +9,6 @@ const BucketManager = require("./custom_modules/kademlia/BucketManager");
 import {KeyFileStore} from "./custom_modules/crypto/KeyFileStore";
 import {KeyDTO} from "./custom_modules/data/entity/dto/KeyDTO";
 import {KeyType} from "./custom_modules/enum/KeyTypeEnum";
-import {SignatureDTO} from "./custom_modules/data/entity/dto/SignatureDTO";
 import SignedKeyService from "./service/SignedKeyService";
 const util = require("./custom_modules/util");
 
@@ -19,7 +18,7 @@ class AppInitializer {
     constructor() {
         global.baseNode = new Node(
             constants.BASE_NODE_ID,
-            constants.BASE_NODE_ID,
+            util.createHashFromKey(constants.BASE_NODE_ID, constants.B / 8),
             constants.BASE_NODE_IP_ADDR,
             constants.BASE_NODE_PORT
         );
@@ -35,26 +34,20 @@ class AppInitializer {
             console.log(nodeIpAddr + " : " + nodePort);
             global.node = new Node(null, null, nodeIpAddr, nodePort);
         } else {
-            let userName = constants.BASE_NODE_ID;
-            console.log(userName);
-
-            const userId = util.createHashFromKey(userName, constants.B / 8);
-
+            const userName = constants.BASE_NODE_ID;
+            const userId = util.createHashFromKey(constants.BASE_NODE_ID, constants.B / 8);
             global.node = new Node(userName, userId, nodeIpAddr, nodePort);
 
             KeyGenerator.generatePublicPrivateKeyPairAndWriteToFile(userId);
             global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
             global.privateKey = KeyFileStore.readPrivateKeyFromStore(userId);
-            let keyDto = new KeyDTO(global.publicKey.toString(),KeyType.GLOBAL);
 
+            let keyDto = new KeyDTO(global.publicKey.toString(),KeyType.GLOBAL);
             let signedKey = SignedKeyService.generateSignedKey(userName, keyDto);
 
             SignedKeyService.publishSignedKeyIntoTheNetwork(userName, signedKey, () => {
-                console.log("Signed Key for user " + userName + " published into the network");
-
+                console.log("Base node public key added to network");
             });
-
-            global.SignedKeyManager.storeValue(userName,signedKey);
         }
     }
 

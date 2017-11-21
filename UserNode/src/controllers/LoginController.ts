@@ -45,7 +45,7 @@ class LoginController {
                             response.status(HttpStatus.OK).send('All good!');
                             communicator.fillUpYourBuckets();
                         } else {
-                            SignedKeyService.getUsersSignedKey(userId, false, (signedKey: SignedKeyDTO) => {
+                            SignedKeyService.getUsersSignedKey(userId, (signedKey: SignedKeyDTO) => {
                                 if (signedKey) {
                                     global.publicKey = signedKey.key;
                                     KeyFileStore.writePublicKeyPemToStore(userId, signedKey.key.value);
