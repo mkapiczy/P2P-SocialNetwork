@@ -31,6 +31,7 @@ angular.module('socialApp')
                 }).then(function (response) {
                     self.messages.splice(index, 1);
                     console.log("Response from server:" + response.data);
+                    document.getElementsByClassName("processBtn").disabled = true;
                 });
             };
         }],

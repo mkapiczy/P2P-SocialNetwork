@@ -4,7 +4,7 @@ import {IKey} from "./IKey";
 export class PublicKey implements IKey {
     private key : NodeRSA;
 
-    constructor(key: NodeRSA.Key) {
+    constructor(key: string) {
         this.key = new NodeRSA();
         this.key.importKey(key,'pkcs1-public-pem');
     }

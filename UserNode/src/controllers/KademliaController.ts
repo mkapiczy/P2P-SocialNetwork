@@ -4,9 +4,9 @@ const Kademlia = require("./../custom_modules/kademlia/kademlia");
 const kademlia = new Kademlia();
 const HttpStatus = require("http-status-codes");
 const Node = require("./../custom_modules/kademlia/node");
-const communicator = require("../custom_modules/kademlia/kademliaCommunicator");
 
 import DataManagerIdentifier from "../custom_modules/data/manager/DataManagerIdentifier"
+import SignedKeyService from "../service/SignedKeyService";
 
 
 class KademliaController {
@@ -28,16 +28,21 @@ class KademliaController {
             request.body.nodePort
         );
 
-        kademlia.handlePing(requestNode, () => {
-            response.status(HttpStatus.OK);
-            response.json({
-                nodeId: global.node.id,
-                rpcId: request.body.rpcId,
-                msg: "PONG"
-            });
-            console.log("Buckets", global.BucketManager.buckets);
+        SignedKeyService.isUserPublicKeyValid(requestNode.id, (isValid) => {
+            if (isValid) {
+                kademlia.handlePing(requestNode, () => {
+                    response.status(HttpStatus.OK);
+                    response.json({
+                        nodeId: global.node.id,
+                        rpcId: request.body.rpcId,
+                        msg: "PONG"
+                    });
+                    console.log("Buckets", global.BucketManager.buckets);
+                });
+            } else {
+                console.log("User public key NOT valid!");
+            }
         });
-
     }
 
     findNode(request, response) {

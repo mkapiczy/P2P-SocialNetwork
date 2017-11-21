@@ -35,9 +35,14 @@ NodeCommunicator.prototype.findClosestNodeToTheKye = function (key, callback) {
     });
 };
 
-NodeCommunicator.prototype.findValue = function (name, valueType, callback) {
+NodeCommunicator.prototype.findValue = function (name, valueType, callback, hashed = false) {
     console.log("Name is: " + name);
-    const key = util.createHashFromKey(name, constants.B / 8);
+    let key;
+    if (!hashed) {
+        key = util.createHashFromKey(name, constants.B / 8);
+    } else {
+        key = name;
+    }
     console.log("The key is: " + key);
     let shortlist = [];
     let alphaNodes = global.BucketManager.getAlphaClosestNodes(key);
