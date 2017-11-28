@@ -18,7 +18,7 @@ class AppInitializer {
     constructor() {
         global.baseNode = new Node(
             constants.BASE_NODE_ID,
-            util.createHashFromKey(constants.BASE_NODE_ID, constants.B / 8),
+            constants.BASE_NODE_ID,
             constants.BASE_NODE_IP_ADDR,
             constants.BASE_NODE_PORT
         );
@@ -35,8 +35,9 @@ class AppInitializer {
             global.node = new Node(null, null, nodeIpAddr, nodePort);
         } else {
             const userName = constants.BASE_NODE_ID;
-            const userId = util.createHashFromKey(constants.BASE_NODE_ID, constants.B / 8);
-            global.node = new Node(userName, userId, nodeIpAddr, nodePort);
+            const userId = util.createHashFromKey(userName, constants.B / 8);
+
+            global.node = new Node(global.baseNode.username, userId, nodeIpAddr, nodePort);
 
             KeyGenerator.generatePublicPrivateKeyPairAndWriteToFile(userId);
             global.publicKey = KeyFileStore.readPublicKeyFromStore(userId);
@@ -46,7 +47,8 @@ class AppInitializer {
             let signedKey = SignedKeyService.generateSignedKey(userName, keyDto);
 
             SignedKeyService.publishSignedKeyIntoTheNetwork(userName, signedKey, () => {
-                console.log("Base node public key added to network");
+                console.log("Signed Key for user " + userName + " published into the network");
+
             });
         }
     }
